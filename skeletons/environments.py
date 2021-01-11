@@ -12,4 +12,5 @@ class VacuumWorld(Environment):
     def __init__(self, agents):
         super().__init__(agents)
         self.space = Grid(columns=2, rows=1)
+        self.rules = []
 

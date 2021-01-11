@@ -1,3 +1,6 @@
+from sensors import VacuumSensor
+
+
 class Agent:
     def __init__(self, name=None, environment=None):
         self.name = name
@@ -8,6 +11,11 @@ class Agent:
 
     def agent_function(self, percepts=None):
         return 'some action from some actuator based on given percepts/environment'
+
+
+class Vacuum(Agent):
+    def __init__(self):
+        self.sensors = VacuumSensor()
 
 
 

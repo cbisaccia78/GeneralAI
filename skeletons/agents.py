@@ -8,15 +8,19 @@ class Agent:
         self.percept_history = None
         self.actuators = None
         self.environment = environment
+        self.notify_env()
 
     def agent_function(self, *args):
         return
 
+    def notify_env(self):
+        self.environment.agents[self.name] += self
+
 
 class Vacuum(Agent):
-    def __init__(self):
+    def __init__(self, name, environment):
+        super().__init__(name=name, environment=environment)
         self.sensors = VacuumSensor()
-        self.environment = None
         self.actuators = []
 
     def suck(self):

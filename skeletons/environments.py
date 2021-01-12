@@ -8,6 +8,12 @@ class Environment:
         self.space = None
         self.rules = None
 
+    def step(self):
+        return
+
+    def start(self, steps=None):
+        return
+
 
 class VacuumWorld(Environment):
     def __init__(self, col, row):
@@ -22,3 +28,6 @@ class VacuumWorld(Environment):
             raise ValueError('too many agents')
         self.agents['vacuums'] += Vacuum(name=name if name else 'Vacuum ' + num_agents + 1)
         return
+
+
+

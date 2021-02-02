@@ -8,23 +8,49 @@ class Agent:
         self.percept_history = None
         self.actuators = None
         self.environment = environment
-        self.notify_env()
+        self.loc = self.notify_env()
 
-    def agent_function(self, *args):
+    def __repr__(self):
+        return self.__class__.__name__
+
+    def agent_program(self, *args): # maps a given percept sequence to an action and sends action to actuators
         return
 
     def notify_env(self):
-        self.environment.agents[self.name] += self
+        if self.environment:
+            self.environment.agents[repr(self)].append(self)
+            return self.environment.assign_loc(self)
 
 
-class Vacuum(Agent):
+class TableDrivenAgent(Agent):
+    def __init__(self, name, environment):
+        super().__init__(name=name, environment=environment)
+
+    def agent_program(self, percept):
+        return
+
+
+class Vacuum(TableDrivenAgent):
     def __init__(self, name, environment):
         super().__init__(name=name, environment=environment)
         self.sensors = VacuumSensor()
         self.actuators = []
 
     def suck(self):
+        self.environment.space.grid[self.xloc][self.yloc] = 1
         return
+
+    def left(self):
+        self.xloc = self.xloc - 1
+
+    def right(self):
+        self.xloc = self.xloc + 1
+
+    def up(self):
+        self.yloc = self.yloc - 1
+
+    def down(self):
+        self.yloc = self.yloc +1
 
 
 

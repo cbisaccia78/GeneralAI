@@ -25,9 +25,12 @@ class Agent:
 class TableDrivenAgent(Agent):
     def __init__(self, name, environment):
         super().__init__(name=name, environment=environment)
+        self.percept_history = []
+        self.tabulator = {}
 
     def agent_program(self, percept):
-        return
+        self.percept_history.append(percept)
+        return self.tabulator[self.percept_history]
 
 
 class Vacuum(TableDrivenAgent):

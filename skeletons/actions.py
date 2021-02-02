@@ -20,8 +20,8 @@ class Action:
                 broken up into sub-actions, namely moving the arm, closing fingers to grip, and moving arm back. In
                 this way the action can be defined as a time-based sequence of 'directives' which will be interpreted
                 by the arm. The arm actuator is what 'brings to life' those directives within the environment.
-                Therefore it is necessary to provide Actuators with the ability to sub-divide actions into their
-                constituent directives and map them to their 'consequences'.
+                At a basic level then, the action should be a dict of {t1: d1, t2: d2, ..., tk: dk}
+                where the ti's are time units and the di's are directives
 
 
     """

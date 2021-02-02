@@ -9,11 +9,7 @@ class Directive:
 
 class Action:
     """
-        To consider the definition of an action, the following example will be helpful:
-            Imagine a system containing a brain, a body, and a water bottle.
-             - The brain, for our purposes, is the implementation of the agent function. ie) it takes a percept sequence
-                 (memory) and maps it to a given action (electrical/chemical impulse sent to the body)
-             - The body is a collection of actuators, but this action only requires the arm actuator to be completed
+        In the context of the brain-arm-bottle example:
              - The action is characterized by information within the electrical impulses sent to the arm sent over
                 the duration of time the arm is grabbing the water bottle. Within this period of time, the act of
                 'grabbing' can be further
@@ -22,8 +18,6 @@ class Action:
                 by the arm. The arm actuator is what 'brings to life' those directives within the environment.
                 At a basic level then, the action should be a dict of {t1: d1, t2: d2, ..., tk: dk}
                 where the ti's are time units and the di's are directives
-
-
     """
     def __init__(self):
         return

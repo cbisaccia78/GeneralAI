@@ -29,6 +29,12 @@ class TableDrivenAgent(Agent):
         self.tabulator = {}
 
     def agent_program(self, percept):
+        """
+        In the context of the brain-arm-bottle example, the brain would be the implementation of the agent function.
+        ie) it takes a percept sequence(memory) and maps it to a given action (electrical/chemical impulse sent to the body)
+        :param percept:
+        :return:
+        """
         self.percept_history.append(percept)
         return self.tabulator[self.percept_history]
 

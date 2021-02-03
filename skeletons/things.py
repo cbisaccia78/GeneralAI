@@ -1,4 +1,4 @@
-from skeletons.properties import Shape, Size
+from skeletons.properties import Shape, Size, D1Shape, D2Shape, D3Shape, D1Size, D2Size, D3Size
 
 
 class Thing:
@@ -23,24 +23,28 @@ class Virtual(Thing):
 
 class D0Physical(Physical):
     def __init__(self, name=None, shape: Shape = None, size: Size = None):
+        super(D0Physical, self).__init__(name, shape, size)
         self.dim = 0
         return
 
 
 class D1Physical(Physical):
     def __init__(self, name=None, shape: D1Shape = None, size: D1Size = None):
+        super(D1Physical, self).__init__(name, shape, size)
         self.dim = 1
         return
 
 
 class D2Physical(Physical):
     def __init__(self, name=None, shape: D2Shape = None, size: D2Size = None):
+        super(D2Physical, self).__init__(name, shape, size)
         self.dim = 2
         return
 
 
 class D3Physical(Physical):
     def __init__(self, name=None, shape: D3Shape = None, size: D3Size = None):
+        super(D3Physical, self).__init__(name, shape, size)
         self.dim = 3
         return
 

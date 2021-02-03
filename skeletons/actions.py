@@ -1,12 +1,3 @@
-class Directive:
-    """
-        Following the brain-arm-bottle example, a particular directive is the voltage
-        of the electrical impulse at the entry to the arm at a given unit of time.
-    """
-    def __init__(self):
-        return
-
-
 class Action:
     """
         In the context of the brain-arm-bottle example:

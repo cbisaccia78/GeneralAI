@@ -27,28 +27,11 @@ class Agent:
             return self.environment.assign_partial(self)
 
 
-class TableDrivenAgent(Agent):
-    def __init__(self, name, environment):
-        super().__init__(name=name, environment=environment)
-        self.tabulator = {}
+class ProblemSolver(Agent):
 
-    def agent_program(self, percept):
-        """
-        In the context of the brain-arm-bottle example, the brain would be the implementation of the agent function.
-        ie) it takes a percept sequence(memory) and maps it to a given action (electrical/chemical impulse sent to the body)
-        :param percept:
-        :return:
-        """
-        self.percept_history.append(percept)
-        return self.tabulator[self.percept_history]
-
-
-class ModelBasedReflexAgent(Agent):
-    def __init__(self, name=None, environment=None):
-        super(ModelBasedReflexAgent, self).__init__(name, environment)
-
-
-class Solver(Agent):
+    def __init__(self, name=None, environment=None, eyes_closed=False):
+        super(ProblemSolver, self).__init__(name, environment)
+        self.eyes_closed = eyes_closed
 
     def formulate_goal(self):
         return True
@@ -66,19 +49,24 @@ class Solver(Agent):
         return self.search(problem)
 
 
-class EyesClosed(Solver):
+class TableDrivenAgent(Agent):
     def __init__(self, name, environment):
         super().__init__(name=name, environment=environment)
-        self.seq = []
+        self.tabulator = {}
 
-    def search(self, problem):
-        return []
+    def agent_program(self, percept):
+        """
+        In the context of the brain-arm-bottle example, the brain would be the implementation of the agent function.
+        ie) it takes a percept sequence(memory) and maps it to a given action (electrical/chemical impulse sent to the body)
+        :param percept:
+        :return:
+        """
+        self.percept_history.append(percept)
+        return self.tabulator[self.percept_history]
 
 
-class EyesOpen(Solver):
 
-    def search(self, problem):
-        return 0
+
 
 
 

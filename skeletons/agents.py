@@ -50,7 +50,6 @@ class ModelBasedReflexAgent(Agent):
 
 class Solver(Agent):
 
-
     def formulate_goal(self):
         return True
 
@@ -66,6 +65,7 @@ class Solver(Agent):
         problem = self.formulate_problem(goal)
         return self.search(problem)
 
+
 class EyesClosed(Solver):
     def __init__(self, name, environment):
         super().__init__(name=name, environment=environment)
@@ -75,12 +75,7 @@ class EyesClosed(Solver):
         return []
 
 
-class EyesOpenSolver(Solver):
-    def agent_program(self, percept):
-        self.update_state(percept)
-        goal = self.formulate_goal()
-        problem = self.formulate_problem(goal)
-        return self.search(problem)
+class EyesOpen(Solver):
 
     def search(self, problem):
         return 0

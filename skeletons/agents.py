@@ -5,7 +5,7 @@ class Agent:
     def __init__(self, name=None, environment=None):
         self.name = name
         self.sensors = None
-        self.percept_history = None
+        self.percept_history = []
         self.actuators = None
         self.environment = environment
         self.loc = self.notify_env()
@@ -13,8 +13,12 @@ class Agent:
     def __repr__(self):
         return self.__class__.__name__
 
-    def agent_program(self, *args): # maps a given percept sequence to an action and sends action to actuators
+    def agent_program(self, percept): # maps a given percept sequence to an action and sends action to actuators
+        self.update_state(percept)
         return
+
+    def update_state(self, percept):
+        self.percept_history.append(percept)
 
     def notify_env(self):
         if self.environment:
@@ -25,7 +29,6 @@ class Agent:
 class TableDrivenAgent(Agent):
     def __init__(self, name, environment):
         super().__init__(name=name, environment=environment)
-        self.percept_history = []
         self.tabulator = {}
 
     def agent_program(self, percept):
@@ -39,28 +42,24 @@ class TableDrivenAgent(Agent):
         return self.tabulator[self.percept_history]
 
 
-class Vacuum(TableDrivenAgent):
+class ModelBasedReflexAgent(Agent):
+    def __init__(self, name=None, environment=None):
+        super(ModelBasedReflexAgent, self).__init__(name, environment)
+
+
+class SimpleProblemSolvingAgent(Agent):
     def __init__(self, name, environment):
         super().__init__(name=name, environment=environment)
-        self.sensors = VacuumSensor()
-        self.actuators = []
 
-    def suck(self):
-        self.environment.space.grid[self.xloc][self.yloc] = 1
+    def agent_program(self, percept):
+        self.update_state(percept)
+        return self.tabulator[self.percept_history]
+
+    def search(self, problem):
         return
 
-    def left(self):
-        self.xloc = self.xloc - 1
-
-    def right(self):
-        self.xloc = self.xloc + 1
-
-    def up(self):
-        self.yloc = self.yloc - 1
-
-    def down(self):
-        self.yloc = self.yloc +1
-
+    def formulate_problem(self, state, goal):
+        return
 
 
 

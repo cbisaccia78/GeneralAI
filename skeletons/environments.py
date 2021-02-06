@@ -16,6 +16,13 @@ class Environment:
     def start(self, steps=None):
         return
 
+    def assign_partial(self, agent):
+        # determine the local version of the agents environment
+        return
+
+    def update_state(self, percept):
+        return
+
 
 class GridEnv2D(Environment):
     def __init__(self, col, row):
@@ -23,7 +30,7 @@ class GridEnv2D(Environment):
         self.space = Grid2D(columns=col, rows=row)
         self.rules = []
 
-    def assign_loc(self, agent):
+    def assign_location(self, agent):
         # find empty x loc
         for x in self.space.grid[0]:
             return

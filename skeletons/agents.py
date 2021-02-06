@@ -48,39 +48,42 @@ class ModelBasedReflexAgent(Agent):
         super(ModelBasedReflexAgent, self).__init__(name, environment)
 
 
-class SimpleProblemSolvingAgent(Agent):
+class Solver(Agent):
+
+
+    def formulate_goal(self):
+        return True
+
+    def formulate_problem(self, goal):
+        return True
+
+    def search(self, problem):
+        return True
+
+    def agent_program(self, percept):
+        self.update_state(percept)
+        goal = self.formulate_goal()
+        problem = self.formulate_problem(goal)
+        return self.search(problem)
+
+class EyesClosed(Solver):
     def __init__(self, name, environment):
         super().__init__(name=name, environment=environment)
         self.seq = []
 
-    def agent_program(self, percept):
-        """
-            state ← UPDATE-STATE (state, percept )
-            if seq is empty then
-                goal ← FORMULATE -GOAL (state)
-                problem ← FORMULATE -PROBLEM (state, goal )
-                seq ← SEARCH ( problem)
-                if seq = failure then return a null action
-            action ← FIRST (seq)
-            seq ← REST (seq
-            """
-        self.update_state(percept)
-        if not len(self.seq):
-            goal = self.formulate_goal(state)
-            problem = self.formulate_problem(state, goal)
-            self.seq = self.search(problem)
-            if not len(self.seq):
-                return None
-        return self.seq.pop(0)
-
     def search(self, problem):
         return []
 
-    def formulate_goal(self, state):
-        return True
 
-    def formulate_problem(self, state, goal):
-        return True
+class EyesOpenSolver(Solver):
+    def agent_program(self, percept):
+        self.update_state(percept)
+        goal = self.formulate_goal()
+        problem = self.formulate_problem(goal)
+        return self.search(problem)
+
+    def search(self, problem):
+        return 0
 
 
 

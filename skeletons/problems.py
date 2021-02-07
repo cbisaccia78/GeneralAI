@@ -40,7 +40,7 @@ class Problem:
         return new_state
 
     def test(self, state):
-        if State.is_in(self.goal_states, self.goal_state):
+        if State.is_in(state, self.goal_states):
             return True
         return False
 

@@ -13,10 +13,6 @@ class Agent:
     def __repr__(self):
         return self.__class__.__name__
 
-    def agent_program(self, percept): # maps a given percept sequence to an action and sends action to actuators
-        self.update_state(percept)
-        return
-
     def update_state(self, percept):
         self.percept_history.append(percept)
         self.local_env.update_state(percept)
@@ -29,24 +25,35 @@ class Agent:
 
 class ProblemSolver(Agent):
 
-    def __init__(self, name=None, environment=None, eyes_closed=False):
+    def __init__(self, name=None, environment=None, closed_loop=True):
         super(ProblemSolver, self).__init__(name, environment)
-        self.eyes_closed = eyes_closed
+        self.closed_loop = closed_loop  # self.eyes_open = eyes_open
+        self.goal = self.formulate_goal()
+        self.problem = self.formulate_problem()
 
     def formulate_goal(self):
         return True
 
-    def formulate_problem(self, goal):
+    def formulate_problem(self):
+        #takes self.goal to formulate problem
         return True
 
     def search(self, problem):
+        seq = []
+        return seq[0] if self.closed_loop else seq
+
+    def agent_program(self):
+        while not self.goal.achieved(self.state):
+            "process precepts"
+            "act on precepts"
         return True
 
-    def agent_program(self, percept):
+    def act(self,percept):
         self.update_state(percept)
-        goal = self.formulate_goal()
-        problem = self.formulate_problem(goal)
-        return self.search(problem)
+        actions = self.search(self.problem)
+        for action in actions:
+            self.actuators[]
+
 
 
 class TableDrivenAgent(Agent):

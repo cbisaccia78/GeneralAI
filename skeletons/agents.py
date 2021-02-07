@@ -52,7 +52,7 @@ class ProblemSolver(Agent):
         self.update_state(percept)
         actions = self.search(self.problem)
         for action in actions:
-            self.actuators[]
+            self.actuators[action.actuator_name].act(action)
 
 
 

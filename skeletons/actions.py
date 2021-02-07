@@ -9,7 +9,10 @@ class Action:
                 the environment. At a basic level then, the action should be a dict of {t1: d1, t2: d2, ..., tk: dk}
                 where the ti's are time units and the di's are directives.
     """
-    def __init__(self):
+    def __init__(self, name, source_state, target_state):
+        self.name = name
+        self.source = source_state
+        self.target = target_state
         return
         """
         a list of directives to be used by an actuator

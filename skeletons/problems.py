@@ -3,7 +3,8 @@ from skeletons.states import State
 
 
 class ProblemNode:
-    def __init__(self, state, actions):
+    def __init__(self, prev_state, state, actions):
+        self.prev_state = prev_state
         self.state = state
         self.actions = actions
 
@@ -44,9 +45,9 @@ class Problem:
         return False
 
     def generate_state_space(self, depth=-1):
-        # uses initial_state
-        head = ProblemNode(self.initial_state, self.actions(self.initial_state))
-
+        head = ProblemNode(prev_state=None, state=self.initial_state, actions=self.actions(self.initial_state))
+        for action in head.actions:
+            continue
         return head
 
 

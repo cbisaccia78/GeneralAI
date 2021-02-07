@@ -5,5 +5,8 @@ class State:
     it will include info relevant to driving, but it wont include the current stock price of google.
     In this way the state is a subset or subclass of the current environment.
     """
-    def __init__(self, problem):
+    def __init__(self):
         return
+
+    def _in(self, state):
+        return True

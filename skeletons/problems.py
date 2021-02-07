@@ -25,9 +25,9 @@ class Problem:
         are states and the links between nodes are actions.
         -
     """
-    def __init__(self, initial_state, goal):
+    def __init__(self, initial_state, goal_states):
         self.initial_state = initial_state
-        self.goal = goal
+        self.goal_states = goal_states
         self.state_space = self.generate_state_space()
         self.head = None
 
@@ -37,6 +37,11 @@ class Problem:
     def result(self, state, action):
         new_state = []
         return new_state
+
+    def test(self, state):
+        if state._in(self.goal_states):
+            return True
+        return False
 
     def generate_state_space(self, depth=-1):
         # uses initial_state

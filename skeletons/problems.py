@@ -1,3 +1,13 @@
+class ProblemNode:
+    def __init__(self):
+        return
+
+
+class ProblemEdge:
+    def __init__(self):
+        return
+
+
 class Problem:
     """
     Problem formulation is the process of deciding what actions
@@ -16,3 +26,4 @@ class Problem:
     """
     def __init__(self, initial_state, goal):
         self.initial_state = initial_state
+        self.state_space = self.generate_state_space(initial_state)

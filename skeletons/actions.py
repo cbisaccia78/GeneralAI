@@ -12,4 +12,7 @@ class Action:
     """
     def __init__(self):
         return
+        """
+        a list of directives to be used by an actuator
+        """
 

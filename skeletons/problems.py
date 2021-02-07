@@ -2,15 +2,9 @@ from actions import Action
 
 
 class ProblemNode:
-    def __init__(self, state):
+    def __init__(self, state, actions):
         self.state = state
-        self.actions = []
-        return
-
-
-class ProblemEdge:
-    def __init__(self):
-        return
+        self.actions = actions
 
 
 class Problem:
@@ -38,11 +32,16 @@ class Problem:
         self.head = None
 
     def actions(self, state):
-        return
+
+        return # list of states reachable from current state in 1 action
+
+    def result(self, state, action):
+        new_state = []
+        return new_state
 
     def generate_state_space(self, depth=-1):
         # uses initial_state
-        self.head = ProblemNode(self.initial_state)
+        self.head = ProblemNode(self.initial_state, self.actions(self.initial_state))
 
         return []
 

@@ -13,9 +13,9 @@ class Agent:
     def __repr__(self):
         return self.__class__.__name__
 
-    def update_state(self, percept):
-        self.percept_history.append(percept)
-        self.local_env.update_state(percept)
+    def update_state(self, percepts):
+        self.percept_history.extend(percepts)
+        self.local_env.update_state(percepts)
 
     def notify_env(self):
         if self.environment:
@@ -26,7 +26,7 @@ class Agent:
         precepts = []
         for sensor in self.sensors:
             precepts.append(sensor.precepts)
-
+        return precepts
 
 
 class ProblemSolver(Agent):
@@ -43,17 +43,15 @@ class ProblemSolver(Agent):
 
     def agent_program(self):
         while not self.goal.achieved(self.state):
-
-            precept = self.
-            self.act(precept)
+            precepts = self.sense()
+            self.act(precepts)
         return True
 
-    def act(self,percept):
-        self.update_state(percept)
+    def act(self,percepts):
+        self.update_state(percepts)
         actions = self.search(self.problem)
         for action in actions:
             self.actuators[action.actuator_name].act(action)
-
 
 
 class TableDrivenAgent(Agent):

@@ -1,5 +1,10 @@
+from actions import Action
+
+
 class ProblemNode:
-    def __init__(self):
+    def __init__(self, state):
+        self.state = state
+        self.actions = []
         return
 
 
@@ -16,6 +21,8 @@ class Problem:
     Problem formulation requires:
         - a description of the initial state ie) in(Arad)
         - a way to generate the valid actions in a particular state
+            - actions(s) returns a set of actions executable in s
+            - for example, actions(in(arad)) = {Go(Sibiu), Go(Timisoara ), Go(Zerind )}
         - a description of what each action does (transition model) specified by Result(a, s) where a and s are actions
             - this Result(a,s) function returns a state
         - a state space description - Together, the initial state, actions, and transition model implicitly define the
@@ -27,4 +34,17 @@ class Problem:
     def __init__(self, initial_state, goal):
         self.initial_state = initial_state
         self.goal = goal
-        self.state_space = self.generate_state_space(initial_state)
+        self.state_space = self.generate_state_space()
+        self.head = None
+
+    def actions(self, state):
+        return
+
+    def generate_state_space(self, depth=-1):
+        # uses initial_state
+        self.head = ProblemNode(self.initial_state)
+
+        return []
+
+
+

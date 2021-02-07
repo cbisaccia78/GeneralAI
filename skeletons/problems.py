@@ -13,10 +13,10 @@ class Problem:
     and states to consider, given a goal.
 
     Problem formulation requires:
-        - a description of the initial state ie) in(Arad)
+        - a description of the initial state ie) location of hand
         - a way to generate the valid actions in a particular state
             - actions(s) returns a set of actions executable in s
-            - for example, actions(in(arad)) = {Go(Sibiu), Go(Timisoara ), Go(Zerind )}
+            - for example, actions(hand) = {Go(Sibiu), Go(Timisoara ), Go(Zerind )}
         - a description of what each action does (transition model) specified by Result(a, s) where a and s are actions
             - this Result(a,s) function returns a state
         - a state space description - Together, the initial state, actions, and transition model implicitly define the
@@ -32,8 +32,7 @@ class Problem:
         self.head = None
 
     def actions(self, state):
-
-        return # list of states reachable from current state in 1 action
+        return # list of actions executable from the current state
 
     def result(self, state, action):
         new_state = []

@@ -8,5 +8,15 @@ class State:
     def __init__(self):
         return
 
-    def _in(self, state):
+    @staticmethod
+    def sub_state(state1, state2):
+        for attribute in state1.__dict__:
+            if not hasattr(state2, attribute) or not getattr(state1, attribute).equals(state2.attribute):
+                return False
+        return True
+
+    @staticmethod
+    def are_equal(state1, state2):
+        if not (State.sub_state(state1, state2) and State.sub_state(state2, state1)):
+            return False
         return True

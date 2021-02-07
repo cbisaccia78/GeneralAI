@@ -1,4 +1,5 @@
 from actions import Action
+from skeletons.states import State
 
 
 class ProblemNode:
@@ -39,7 +40,7 @@ class Problem:
         return new_state
 
     def test(self, state):
-        if state._in(self.goal_states):
+        if State.is_in(self.goal_states, self.goal_state):
             return True
         return False
 

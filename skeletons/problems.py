@@ -29,8 +29,7 @@ class Problem:
     def __init__(self, initial_state, goal_states):
         self.initial_state = initial_state
         self.goal_states = goal_states
-        self.state_space = self.generate_state_space()
-        self.head = None
+        self.state_space_head = self.generate_state_space()
 
     def actions(self, state):
         return # list of actions executable from the current state
@@ -46,9 +45,9 @@ class Problem:
 
     def generate_state_space(self, depth=-1):
         # uses initial_state
-        self.head = ProblemNode(self.initial_state, self.actions(self.initial_state))
+        head = ProblemNode(self.initial_state, self.actions(self.initial_state))
 
-        return []
+        return head
 
 
 

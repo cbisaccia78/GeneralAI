@@ -20,3 +20,10 @@ class State:
         if not (State.sub_state(state1, state2) and State.sub_state(state2, state1)):
             return False
         return True
+
+    @staticmethod
+    def is_in(state1, states):
+        for state in states:
+            if State.sub_state(state1, state):
+                return True
+        return False

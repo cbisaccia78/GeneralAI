@@ -1,9 +1,15 @@
 class Goal:
-    def __init__(self, name=None):
+    def __init__(self, states, name=None):
         self.name = name
-        self.states = []
+        self.states = states
 
     def achieved(self, state):
         if state in self.states:
             return True
         return False
+
+
+class Location(Goal):
+    pass
+
+

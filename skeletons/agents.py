@@ -22,30 +22,30 @@ class Agent:
             self.environment.agents[repr(self)].append(self)
             return self.environment.assign_partial(self)
 
+    def sense(self):
+        precepts = []
+        for sensor in self.sensors:
+            precepts.append(sensor.precepts)
+
+
 
 class ProblemSolver(Agent):
 
-    def __init__(self, name=None, environment=None, closed_loop=True):
+    def __init__(self, goal, problem, environment, name=None,  closed_loop=True):
         super(ProblemSolver, self).__init__(name, environment)
         self.closed_loop = closed_loop  # self.eyes_open = eyes_open
-        self.goal = self.formulate_goal()
-        self.problem = self.formulate_problem()
+        self.goal = goal
+        self.problem = problem
 
-    def formulate_goal(self):
-        return True
-
-    def formulate_problem(self):
-        #takes self.goal to formulate problem
-        return True
-
-    def search(self, problem):
+    def search(self):
         seq = []
         return seq[0] if self.closed_loop else seq
 
     def agent_program(self):
         while not self.goal.achieved(self.state):
-            "process precepts"
-            "act on precepts"
+
+            precept = self.
+            self.act(precept)
         return True
 
     def act(self,percept):

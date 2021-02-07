@@ -47,7 +47,7 @@ class ProblemSolver(Agent):
             self.act(precepts)
         return True
 
-    def act(self,percepts):
+    def act(self, percepts):
         self.update_state(percepts)
         actions = self.search(self.problem)
         for action in actions:

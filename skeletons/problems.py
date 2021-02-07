@@ -26,4 +26,5 @@ class Problem:
     """
     def __init__(self, initial_state, goal):
         self.initial_state = initial_state
+        self.goal = goal
         self.state_space = self.generate_state_space(initial_state)

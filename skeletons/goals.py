@@ -3,7 +3,7 @@ class Goal:
         self.name = name
         self.states = states
 
-    def achieved(self, state):
+    def test(self, state):
         if state in self.states:
             return True
         return False

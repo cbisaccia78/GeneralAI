@@ -31,10 +31,9 @@ class Agent:
 
 class ProblemSolver(Agent):
 
-    def __init__(self, goal, problem, environment, name=None,  closed_loop=True):
+    def __init__(self, problem, environment, name=None,  closed_loop=True):
         super(ProblemSolver, self).__init__(name, environment)
         self.closed_loop = closed_loop  # self.eyes_open = eyes_open
-        self.goal = goal
         self.problem = problem
 
     def search(self):
@@ -42,7 +41,7 @@ class ProblemSolver(Agent):
         return seq[0] if self.closed_loop else seq
 
     def agent_program(self):
-        while not self.goal.achieved(self.state):
+        while not self.problem.goal.test(self.state):
             precepts = self.sense()
             self.act(precepts)
         return True

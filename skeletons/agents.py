@@ -34,7 +34,7 @@ class BasicProblemSolver(Agent):
     """
     Searches sequentially at each layer for a solution to specified problem in particular environment
     """
-    def __init__(self,environment, name=None,  closed_loop=True, problem=None):
+    def __init__(self, environment, name=None,  closed_loop=True, problem=None):
         super(BasicProblemSolver, self).__init__(name, environment)
         self.closed_loop = closed_loop  # AKA: self.eyes_open = eyes_open
         self.problem = problem if problem else Problem()

@@ -5,8 +5,12 @@ class State:
     it will include info relevant to driving, but it wont include the current stock price of google.
     In this way the state is a subset or subclass of the current environment.
     """
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, name=None, space=None):
+        self.name = name if name else self.__class__.__name__
+        self.state = space if space else self.generate_space()
+        return
+
+    def generate_space(self):
         return
 
     @staticmethod

@@ -1,5 +1,5 @@
 from skeletons.spaces import Grid2D
-from skeletons.agents import Vacuum
+from skeletons.agents import BasicProblemSolver
 import numpy as np
 
 

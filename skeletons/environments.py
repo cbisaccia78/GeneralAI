@@ -25,8 +25,10 @@ class Environment:
 
 
 class GridEnv2D(Environment):
-    def __init__(self, col, row):
-        self.agents = {}
+    def __init__(self, col, row, num_agents=0, agents=None, allowed_agents=None):
+        self.allowed_agents=allowed_agents
+        self.agents = agents if agents and self.agent_test(agents) else agents
+        self.num_agents=num_agents
         self.space = Grid2D(columns=col, rows=row)
         self.rules = []
 
@@ -35,10 +37,25 @@ class GridEnv2D(Environment):
         for x in self.space.grid[0]:
             return
 
+    def agent_test(self, agents):
+        if not self.allowed_agents:
+            return True
+
+        if isinstance(agents, list):
+            for agent in agents:
+                if repr(agent) not in self.allowed_agents:
+                    raise Exception()
+            return True
+
+        if repr(agents) in self.allowed_agents:
+            return True
+
+        raise Exception()
+
 
 class VacuumWorld(GridEnv2D):
-    def __init__(self, col, row):
-        super().__init__(col, row)
+    def __init__(self, col, row, num_agents=0, agents=None):
+        super().__init__(col, row, num_agents, agents)
         self.world = [np.arange(self.space.c*self.space.r).reshape(self.space.r, self.space.c)]
         self.allowed_agents = {"Vacuum": self.space.c + self.space.r}
         self.agents = {"Vacuum": []}

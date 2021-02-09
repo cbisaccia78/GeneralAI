@@ -16,11 +16,11 @@ class Environment:
     def start(self, steps=None):
         return
 
-    def assign_partial(self, agent):
-        # determine the local version of the agents environment
+    def assign_state(self, agent):
+        # determine the local state of the particular agent in the environment
         return
 
-    def update_state(self, percept):
+    def assign_local(self, agent):
         return
 
 

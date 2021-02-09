@@ -1,3 +1,4 @@
+from skeletons.problems import Problem
 from skeletons.sensors import VacuumSensor
 
 
@@ -8,7 +9,7 @@ class Agent:
         self.percept_history = []
         self.actuators = None
         self.environment = environment
-        self.local_env = self.notify_env()
+        self.state, self.local_env = self.notify_env()
 
     def __repr__(self):
         return self.__class__.__name__
@@ -20,7 +21,7 @@ class Agent:
     def notify_env(self):
         if self.environment:
             self.environment.agents[repr(self)].append(self)
-            return self.environment.assign_partial(self)
+            return self.environment.assign_state(self), self.environment.assign_local(self)
 
     def sense(self):
         precepts = []
@@ -31,19 +32,24 @@ class Agent:
 
 class BasicProblemSolver(Agent):
     """
-    Searches randomly for a solution to specified problem in particular environment
+    Searches sequentially at each layer for a solution to specified problem in particular environment
     """
-    def __init__(self, problem, environment, name=None,  closed_loop=True):
+    def __init__(self,environment, name=None,  closed_loop=True, problem=None):
         super(BasicProblemSolver, self).__init__(name, environment)
         self.closed_loop = closed_loop  # AKA: self.eyes_open = eyes_open
-        self.problem = problem
+        self.problem = problem if problem else Problem()
 
     def search(self, problem):
         """
-        :param problem:
+        :param problem: provides filtering of environment into a relevant set of features (state space),
+        coupled with a path cost function, a goal evaluation function, and much much more!
         :return: sequence of actions that define a solution
         """
         seq = []
+        head = problem.state_space_head
+        ptr = head.actions.pop()
+        while (not problem.test(ptr.state)) and True:
+            return
         return seq[0] if self.closed_loop else seq
 
     def agent_program(self):

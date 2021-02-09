@@ -56,7 +56,7 @@ class Problem:
         return # list of actions executable from the current state
 
     def result(self, state, action):
-        new_state = []
+        new_state = 0
         return new_state
 
     def test(self, state):
@@ -65,6 +65,10 @@ class Problem:
         return False
 
     def generate_state_space(self, depth=-1):
+        """
+        :param depth: specifies how deep the state space tree will go. -1 for infinite
+        :return:
+        """
         head = ProblemNode(prev_state=None, state=self.initial_state, actions=self.actions(self.initial_state))
         for action in head.actions:
             continue

@@ -29,14 +29,20 @@ class Agent:
         return precepts
 
 
-class ProblemSolver(Agent):
-
+class BasicProblemSolver(Agent):
+    """
+    Searches randomly for a solution to specified problem in particular environment
+    """
     def __init__(self, problem, environment, name=None,  closed_loop=True):
-        super(ProblemSolver, self).__init__(name, environment)
+        super(BasicProblemSolver, self).__init__(name, environment)
         self.closed_loop = closed_loop  # AKA: self.eyes_open = eyes_open
         self.problem = problem
 
     def search(self, problem):
+        """
+        :param problem:
+        :return: sequence of actions that define a solution
+        """
         seq = []
         return seq[0] if self.closed_loop else seq
 

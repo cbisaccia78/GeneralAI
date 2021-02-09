@@ -17,7 +17,7 @@ class Environment:
         return
 
     def add_agents(self, agents):
-        if self.agent_test(agents):
+        if self.validate_agents(agents):
             for agent in agents:
                 agent_name = repr(agent)
                 if agent_name in self.agents:
@@ -25,7 +25,7 @@ class Environment:
                 else:
                     self.agents[agent_name] = [agent]
 
-    def agent_test(self, agents):
+    def validate_agents(self, agents):
         if not self.allowed_agents:
             raise Exception()
 
@@ -40,11 +40,11 @@ class Environment:
 
         raise Exception()
 
-    def assign_state(self, agent):
-        # determine the local state of the particular agent in the environment
+    def assign_initial_state(self, agent):
+        # determine the local state of the particular agent in the environment, specific to agents particular problem
         return
 
-    def assign_local(self, agent):
+    def assign_local_environment(self, agent):
         return
 
 
@@ -64,10 +64,8 @@ class GridEnv2D(Environment):
 class VacuumWorld(GridEnv2D):
     def __init__(self, col, row, num_agents=0, agents=None):
         super().__init__(col, row, num_agents, agents)
-        self.world = [np.arange(self.space.c*self.space.r).reshape(self.space.r, self.space.c)]
-        self.allowed_agents = {"Vacuum": self.space.c + self.space.r}
-        self.agents = {"Vacuum": []}
-
+        self.world = [np.arange(col*row).reshape(row, col)]
+        self.allowed_agents["Vacuum"] = col + row
 
 
 

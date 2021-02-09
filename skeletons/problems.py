@@ -27,10 +27,31 @@ class Problem:
         are states and the links between nodes are actions.
         -
     """
-    def __init__(self, initial_state, goal_states):
+    def __init__(self, initial_state, goal_states, step_cost):
+        """
+
+        :param initial_state: description of the initial state
+        :param goal_states: set of states that would satisfy the goal
+        :param step_cost:
+                function(s1, a, s2):
+                    :param s1: initial state
+                    :param a: action applied to s1
+                    :param s2: resulting state
+                    :return: numeric
+
+        """
         self.initial_state = initial_state
         self.goal_states = goal_states
+        self.step_cost = step_cost
         self.state_space_head = self.generate_state_space()
+
+    def path_cost(self, path):
+        """
+        :param path: [{state1: action1}, ... , {state_n: action_n}]
+        :return: numeric
+        """
+        return sum(list(map(lambda s: self.step_cost(s, ), path)))
+        return 0
 
     def actions(self, state):
         return # list of actions executable from the current state

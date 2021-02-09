@@ -47,7 +47,7 @@ class VacuumWorld(GridEnv2D):
         num_agents = len(self.agents)
         if len(num_agents) >= self.space.c + self.space.r:
             raise ValueError('too many agents')
-        self.agents['vacuums'] += Vacuum(name=name if name else 'Vacuum ' + num_agents + 1)
+        self.agents['Vacuum'] += BasicProblemSolver(name=(name if name else 'Vacuum ' + str(num_agents) + '1'), )
         return
 
 

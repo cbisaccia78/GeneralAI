@@ -33,10 +33,10 @@ class Problem:
         :param initial_state: description of the initial state
         :param goal_states: set of states that would satisfy the goal
         :param step_cost:
-                function(s1, a, s2):
+                function(s1, a, s2=None):
                     :param s1: initial state
                     :param a: action applied to s1
-                    :param s2: resulting state
+                    :param s2: optional resulting state. (is the mapping of action(s) one to one? if not then this is required)
                     :return: numeric
 
         """
@@ -47,11 +47,10 @@ class Problem:
 
     def path_cost(self, path):
         """
-        :param path: [{state1: action1}, ... , {state_n: action_n}]
+        :param path: [(state1, action1), ... , (state_n: action_n)]
         :return: numeric
         """
-        return sum(list(map(lambda s: self.step_cost(s, ), path)))
-        return 0
+        return sum(list(map(lambda t: self.step_cost(t[0], t[1]), path)))
 
     def actions(self, state):
         return # list of actions executable from the current state

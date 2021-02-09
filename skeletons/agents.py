@@ -43,7 +43,7 @@ class BasicProblemSolver(Agent):
         """
         :param problem: provides filtering of environment into a relevant set of features (state space),
         coupled with a path cost function, a goal evaluation function, and much much more!
-        :return: sequence of actions that define a solution
+        :returns: sequence of actions that define a solution
         """
         seq = []
         head = problem.state_space_head
@@ -53,12 +53,23 @@ class BasicProblemSolver(Agent):
         return seq[0] if self.closed_loop else seq
 
     def agent_program(self):
+        """
+        Once the agent is instantiated this method can be called.
+        Once called, it goes through a loop of sense -> act -> update -> goal_test
+        """
         while not self.problem.test(self.state):
             precepts = self.sense()
             self.act(precepts)
         return True
 
     def act(self, percepts):
+        """
+        add the percepts to the agents history,
+        then search the state space for action(s) which will satisfy goal
+        after actions found, pass each action to its respective actuator
+        :param percepts:
+        :return:
+        """
         self.update_state(percepts)
         actions = self.search(self.problem)
         for action in actions:

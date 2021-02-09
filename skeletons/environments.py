@@ -11,12 +11,26 @@ class Environment:
         self.rules = None
 
     def step(self):
+        """
+        time = time + time_unit in whatever sense time_unit is implemented
+        :return:
+        """
         return
 
     def start(self, steps=None):
+        """
+        time = time_unit_0 in whatever sense time_unit is implemented
+        :param steps:
+        :return:
+        """
         return
 
     def add_agents(self, agents):
+        """
+        check to see if agents are allowed and then add them
+        :param agents:
+        :return:
+        """
         if self.validate_agents(agents):
             for agent in agents:
                 agent_name = repr(agent)
@@ -26,6 +40,11 @@ class Environment:
                     self.agents[agent_name] = [agent]
 
     def validate_agents(self, agents):
+        """
+        check to see if agent class names exist in self.allowed_agents
+        :param agents:
+        :return:
+        """
         if not self.allowed_agents:
             raise Exception()
 
@@ -41,7 +60,11 @@ class Environment:
         raise Exception()
 
     def assign_initial_state(self, agent):
-        # determine the local state of the particular agent in the environment, specific to agents particular problem
+        """
+        determine the local state of the particular agent in the environment, specific to agents particular problem
+        :param agent:
+        :return:
+        """
         return
 
     def assign_local_environment(self, agent):
@@ -62,8 +85,8 @@ class GridEnv2D(Environment):
 
 
 class VacuumWorld(GridEnv2D):
-    def __init__(self, col, row, num_agents=0, agents=None):
-        super().__init__(col, row, num_agents, agents)
+    def __init__(self, col, row, name=None):
+        super().__init__(col, row, name)
         self.world = [np.arange(col*row).reshape(row, col)]
         self.allowed_agents["Vacuum"] = col + row
 

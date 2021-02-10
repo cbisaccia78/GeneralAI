@@ -1,10 +1,18 @@
 from skeletons.properties import Shape, Size, D1Shape, D2Shape, D3Shape, D1Size, D2Size, D3Size
+import numpy as np
 
 
 class Thing:
-    def __init__(self, name=None):
+    def __init__(self, name, data=None):
         self.name = name
+        self.data = data
         return
+
+    def __eq__(self, other):
+        if isinstance(self.data, (int, bool, list, tuple)):
+            return self.data == other.data
+        elif isinstance(self.data, np.ndarray):
+            return np.array_equal(self.data, other.data)
 
 
 class Physical(Thing):

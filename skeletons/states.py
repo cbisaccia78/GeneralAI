@@ -1,3 +1,6 @@
+from skeletons.things import Thing
+
+
 class State:
     """
     a state should be relevant to a problem, as to not blow up the memory of the program by including
@@ -5,10 +8,10 @@ class State:
     it will include info relevant to driving, but it wont include the current stock price of google.
     In this way the state is a subset or subclass of the current environment.
     """
-    def __init__(self, name=None, space=None):
-        self.name = name if name else self.__class__.__name__
-        self.state = space if space else self.generate_space()
-        return
+    def __init__(self, name=None, things=None):
+        self.name = name
+        for thing in things:
+            setattr(self, thing.name, thing.data)
 
     def generate_space(self):
         return

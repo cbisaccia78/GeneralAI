@@ -24,9 +24,9 @@ class State:
     @staticmethod
     def sub_state(state1, state2):
         for attribute in state1.__dict__:
-            if not (hasattr(state2, attribute) and getattr(state1, attribute) == getattr(state2,attribute)):
+            if not (hasattr(state2, attribute) and getattr(state1, attribute) == getattr(state2, attribute)):
                 return False
-        return False
+        return True
 
     @staticmethod
     def is_in(state1, states):

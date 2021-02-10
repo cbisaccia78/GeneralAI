@@ -20,8 +20,8 @@ class Agent:
 
     def notify_env(self):
         if self.environment:
-            self.environment.agents[repr(self)].append(self)
-            return self.environment.assign_state(self), self.environment.assign_local(self)
+            self.environment.add_agents(self)
+            return self.environment.assign_initial_state(self), self.environment.assign_initial_local(self)
 
     def sense(self):
         precepts = []

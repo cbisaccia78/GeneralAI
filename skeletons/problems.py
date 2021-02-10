@@ -1,4 +1,4 @@
-from actions import Action
+from skeletons.actions import Action
 from skeletons.states import State
 
 
@@ -52,7 +52,7 @@ class Problem:
         return sum(list(map(lambda t: self.step_cost(t[0], t[1]), path)))
 
     def actions(self, state):
-        return # list of actions executable from the current state
+        return []
 
     def result(self, state, action):
         new_state = 0

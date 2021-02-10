@@ -32,6 +32,9 @@ class Environment:
         :return:
         """
         if self.validate_agents(agents):
+            if not isinstance(agents, list):
+                agents = [agents]
+
             for agent in agents:
                 agent_name = repr(agent)
                 if agent_name in self.agents:
@@ -67,7 +70,7 @@ class Environment:
         """
         return
 
-    def assign_local_environment(self, agent):
+    def assign_initial_local(self, agent):
         return
 
 
@@ -75,6 +78,7 @@ class GridEnv2D(Environment):
     def __init__(self, col, row, name=None):
         self.name = name
         self.allowed_agents = {'BasicProblemSolver': col + row}
+        self.agents = {}
         self.space = Grid2D(columns=col, rows=row)
         self.rules = []
 

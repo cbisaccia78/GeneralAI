@@ -25,6 +25,4 @@ def test_state():
     print(state1 == state2)
 
 
-
-print('test')
 test_state()

@@ -4,3 +4,10 @@ from skeletons.actions import Action
 
 def manhattan(s1: State, a: Action, s2: State = None):
     return
+
+
+"""
+________________________________________________________________________________________________________________________
+Goal Functions
+"""
+

@@ -2,12 +2,24 @@ from skeletons.environments import GridEnv2D
 from skeletons.agents import BasicProblemSolver
 from skeletons.helpers import manhattan
 import numpy as np
+from skeletons.things import Thing
+from skeletons.states import State
 np.array_equal
 col = 10
 row = 10
 num_agents = 1
 
-world = GridEnv2D(name='Vacuum World', col=col, row=row)
-agents = [BasicProblemSolver(name=('solver' + str(i)), environment=world, goal_states=[np.zeros((col, row))], step_cost=manhattan) for i in range(0, num_agents)]
-agents[0].agent_program()
 
+def init_world():
+    world = GridEnv2D(name='Vacuum World', col=col, row=row)
+    agents = [BasicProblemSolver(name=('solver' + str(i)), environment=world, goal_states=[np.zeros((col, row))], step_cost=manhattan) for i in range(0, num_agents)]
+    agents[0].agent_program()
+
+
+def test_state():
+    state1 = State(things=[Thing('int1', 4), Thing('int2', 10)])
+    state2 = State(things=[Thing('int1', 4), Thing('int2', 10)])
+    print(state1 == state2)
+
+
+test_state()

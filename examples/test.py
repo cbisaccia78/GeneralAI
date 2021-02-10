@@ -20,9 +20,11 @@ def init_world():
 
 
 def test_state():
-    state1 = State(things=[Thing('int1', np.zeros((3,4))), Thing('int2', np.zeros((3,4)))])
-    state2 = State(things=[Thing('int1', np.zeros((3,4))), Thing('int2', np.zeros((3,4)))])
+    state1 = State(things=[Thing('int1', np.zeros((3, 4))), Thing('int2', np.zeros((3, 4)))])
+    state2 = State(things=[Thing('int1', np.zeros((3, 4))), Thing('int2', np.zeros((3, 4)))])
     print(state1 == state2)
+
+
 
 
 test_state()

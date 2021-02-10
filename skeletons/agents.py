@@ -1,5 +1,5 @@
 from skeletons.problems import Problem
-from skeletons.sensors import VacuumSensor
+from skeletons.sensors import Sensor, VacuumSensor
 
 
 class Agent:
@@ -14,7 +14,7 @@ class Agent:
     def __repr__(self):
         return self.__class__.__name__
 
-    def update_state(self, percepts):
+    def update_local_env(self, percepts):
         self.percept_history.extend(percepts)
         self.local_env.update_state(percepts)
 
@@ -34,10 +34,10 @@ class BasicProblemSolver(Agent):
     """
     Searches sequentially at each layer for a solution to specified problem in particular environment
     """
-    def __init__(self, environment=None, name=None,  closed_loop=True, problem=None):
+    def __init__(self, environment=None, name=None,  closed_loop=True, goal_states=None, step_cost=None):
         super(BasicProblemSolver, self).__init__(name, environment)
         self.closed_loop = closed_loop  # AKA: self.eyes_open = eyes_open
-        self.problem = problem if problem else Problem(initial_state=self.state, )
+        self.problem = Problem(initial_state=self.state, goal_states=goal_states, step_cost=step_cost)
 
     def search(self, problem):
         """
@@ -73,7 +73,7 @@ class BasicProblemSolver(Agent):
         self.update_state(percepts)
         actions = self.search(self.problem)
         for action in actions:
-            self.actuators[action.actuator_name].act(action)
+            self.state = self.actuators[action.actuator_name].act(action, self.state)
 
 
 class TableDrivenAgent(Agent):

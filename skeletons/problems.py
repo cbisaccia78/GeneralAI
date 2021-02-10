@@ -38,7 +38,6 @@ class Problem:
                     :param a: action applied to s1
                     :param s2: optional resulting state. (is the mapping of action(s) one to one? if not then this is required)
                     :return: numeric
-
         """
         self.initial_state = initial_state
         self.goal_states = goal_states

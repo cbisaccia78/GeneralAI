@@ -17,10 +17,10 @@ class Environment:
         """
         return
 
-    def start(self, steps=None):
+    def start(self, steps=-1):
         """
         time = time_unit_0 in whatever sense time_unit is implemented
-        :param steps:
+        :param steps: increments of time, if -1 go till infinity
         :return:
         """
         return

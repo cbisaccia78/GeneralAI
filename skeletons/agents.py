@@ -37,7 +37,7 @@ class BasicProblemSolver(Agent):
     def __init__(self, environment=None, name=None,  closed_loop=True, problem=None):
         super(BasicProblemSolver, self).__init__(name, environment)
         self.closed_loop = closed_loop  # AKA: self.eyes_open = eyes_open
-        self.problem = problem if problem else Problem()
+        self.problem = problem if problem else Problem(initial_state=self.state, )
 
     def search(self, problem):
         """

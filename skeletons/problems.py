@@ -55,6 +55,12 @@ class Problem:
         return []
 
     def result(self, state, action):
+        """
+        specifies transition model.
+        :param state:
+        :param action:
+        :return:
+        """
         new_state = 0
         return new_state
 

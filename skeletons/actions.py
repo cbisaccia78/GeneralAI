@@ -5,16 +5,20 @@ class Action:
                 the duration of time the arm is grabbing the water bottle. Within this period of time, the act of
                 'grabbing' can be further broken up into sub-actions, namely moving the arm, closing fingers to grip,
                 and moving the arm back. In this way the action can be defined as a time-based sequence of 'directives'
-                which will be interpreted by the arm. The arm actuator is what 'brings to life' those directives within
-                the environment. At a basic level then, the action should be a dict of {t1: d1, t2: d2, ..., tk: dk}
-                where the ti's are time units and the di's are directives.
+                which will be interpreted by the arm.
     """
-    def __init__(self, name, source_state, target_state):
-        self.name = name
-        self.source = source_state
-        self.target = target_state
+    def __init__(self, actuators):
+        self.actuators = actuators
         return
-        """
-        a list of directives to be used by an actuator
-        """
+
+    def __repr__(self):
+        return self.__class__.__name__
+
+    def __eq__(self, other):
+        return repr(self) == repr(other)
+
+
+class Left(Action):
+    def __init__(self, actuators):
+        super(Left, self).__init__(actuators)
 

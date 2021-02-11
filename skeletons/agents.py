@@ -39,16 +39,16 @@ class BasicProblemSolver(Agent):
         self.closed_loop = closed_loop  # AKA: self.eyes_open = eyes_open
         self.problem = Problem(initial_state=self.state, goal_states=goal_states, step_cost=step_cost)
 
-    def search(self, problem):
+    def search(self):
         """
-        :param problem: provides filtering of environment into a relevant set of features (state space),
+        :makes use of self.problem: provides filtering of environment into a relevant set of features (state space),
         coupled with a path cost function, a goal evaluation function, and much much more!
         :returns: sequence of actions that define a solution
         """
         seq = []
-        head = problem.state_space_head
+        head = self.problem.state_space_head
         ptr = head.actions.pop()
-        while (not problem.test(ptr.state)) and True:
+        while (not self.problem.test(ptr.state)) and True:
             return
         return seq[0] if self.closed_loop else seq
 
@@ -71,7 +71,7 @@ class BasicProblemSolver(Agent):
         :return:
         """
         self.update_state(percepts)
-        actions = self.search(self.problem)
+        actions = self.search()
         for action in actions:
             self.state = self.actuators[action.actuator_name].act(action, self.state)
 

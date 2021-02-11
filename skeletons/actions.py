@@ -22,6 +22,21 @@ class Action:
 
 
 class Left(Action):
-    def __init__(self):
-        self.actuators = {}
+    def __init__(self, units):
+        return
+
+
+class Right(Action):
+    def __init__(self, units):
+        return
+
+
+class Up(Action):
+    def __init__(self, units):
+        return
+
+
+class Down(Action):
+    def __init__(self, units):
+        return
 

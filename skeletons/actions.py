@@ -7,8 +7,11 @@ class Action:
                 and moving the arm back. In this way the action can be defined as a time-based sequence of 'directives'
                 which will be interpreted by the arm.
     """
-    def __init__(self, actuators):
-        self.actuators = actuators
+    def __init__(self):
+        """
+            actuators: a list of actuator classes which support implementation of the action
+        """
+        self.actuators = None
         return
 
     def __repr__(self):
@@ -19,6 +22,6 @@ class Action:
 
 
 class Left(Action):
-    def __init__(self, actuators):
-        super(Left, self).__init__(actuators)
+    def __init__(self):
+        self.actuators = {}
 

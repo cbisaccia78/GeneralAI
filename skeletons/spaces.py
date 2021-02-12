@@ -13,3 +13,10 @@ class Grid2D(Space):
         self.r = rows
         self.grid = np.random.default_rng().integers(2, size=(rows, columns))
 
+    def __repr__(self):
+        return self.__class__.__name__
+
+    def __eq__(self, other):
+        return repr(self) == other
+
+

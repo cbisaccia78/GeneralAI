@@ -98,7 +98,10 @@ class GridEnv2D(Environment):
     def assign_location(self, agent):
         # find empty x loc
         env_dims = self.state.Grid2D.shape
-        return self.for_util(env_dims[0], env_dims[1])
+        loc =  self.for_util(env_dims[0], env_dims[1])
+        if loc:
+            self.agent_coords.add(loc)
+        return loc
         """
         THIS CODE COULD BE MORE EFFICIENT FOR MASSIVE GRIDS
         
@@ -110,10 +113,7 @@ class GridEnv2D(Environment):
         """
 
     def assign_initial_state(self, agent):
-        ag_loc = self.assign_location(agent)
-        if not ag_loc:
-            return None
-        self.state.Grid2D[ag_loc[0]][ag_loc[1]] = agent
+        return self.assign_location(agent)
 
     def assign_initial_local(self, agent):
         return

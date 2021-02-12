@@ -2,11 +2,7 @@ from skeletons.actions import Action
 from skeletons.states import State
 
 
-class ProblemNode:
-    def __init__(self, prev_state, state, actions):
-        self.prev_state = prev_state
-        self.state = state
-        self.actions = actions
+
 
 
 class Problem:

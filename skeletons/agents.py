@@ -1,5 +1,7 @@
-from skeletons.problems import Problem, ProblemNode
+from skeletons.problems import Problem
+from skeletons.states import StateNode
 from skeletons.sensors import Sensor, VacuumSensor
+
 
 
 class Agent:
@@ -10,6 +12,7 @@ class Agent:
         self.actuators = None
         self.environment = environment
         self.state, self.local_env = self.notify_env()
+        self.ss_head = None
 
     def __repr__(self):
         return self.__class__.__name__
@@ -42,15 +45,26 @@ class BasicProblemSolver(Agent):
     def actions(self, state):
         return []
 
+    def bfsg(self, head, depth):
+        """
 
+        :param head:
+        :param depth:
+        :return:
+        """
+        return
 
     def generate_state_space(self, depth=-1):
         """
+        num_states = sum_i(sum_j(thing_ij * num_values_thing_ij*)) for j ranging over all things in state i
         :param depth: specifies how deep the state space tree will go. -1 for exhaustion
         :return:
         """
-        head = ProblemNode(prev_state=None, state=self.initial_state, actions=self.actions(self.initial_state))
-        for action in head.actions:
+        self.ss_head = StateNode(prev_state=None, state=self.initial_state)
+        self.bfsg()
+        head.gen_future_states(actions=self.actions(self.initial_state), actuators=self.actuators)
+        for state in head.future_states:
+            state.gen_future_states(actions=self.actions(state))
             continue
         return head
 

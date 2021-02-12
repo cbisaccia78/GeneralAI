@@ -34,3 +34,10 @@ class State:
             if State.sub_state(state1, state):
                 return True
         return False
+
+class StateNode:
+    def __init__(self, prev_state, state):
+        self.prev_state = prev_state
+        self.state = state
+        self.future_states = []
+    def gen_future_states(self, actions, actuators):

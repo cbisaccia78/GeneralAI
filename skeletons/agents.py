@@ -1,4 +1,4 @@
-from skeletons.problems import Problem
+from skeletons.problems import Problem, ProblemNode
 from skeletons.sensors import Sensor, VacuumSensor
 
 
@@ -38,6 +38,21 @@ class BasicProblemSolver(Agent):
         super(BasicProblemSolver, self).__init__(name, environment)
         self.closed_loop = closed_loop  # AKA: self.eyes_open = eyes_open
         self.problem = Problem(initial_state=self.state, goal_states=goal_states, step_cost=step_cost)
+
+    def actions(self, state):
+        return []
+
+
+
+    def generate_state_space(self, depth=-1):
+        """
+        :param depth: specifies how deep the state space tree will go. -1 for exhaustion
+        :return:
+        """
+        head = ProblemNode(prev_state=None, state=self.initial_state, actions=self.actions(self.initial_state))
+        for action in head.actions:
+            continue
+        return head
 
     def search(self):
         """

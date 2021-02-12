@@ -51,33 +51,14 @@ class Problem:
         """
         return sum(list(map(lambda t: self.step_cost(t[0], t[1]), path)))
 
-    def actions(self, state):
-        return []
 
-    def result(self, state, action):
-        """
-        specifies transition model.
-        :param state:
-        :param action:
-        :return:
-        """
-        new_state = 0
-        return new_state
 
     def test(self, state):
         if State.is_in(state, self.goal_states):
             return True
         return False
 
-    def generate_state_space(self, depth=-1):
-        """
-        :param depth: specifies how deep the state space tree will go. -1 for exhaustion
-        :return:
-        """
-        head = ProblemNode(prev_state=None, state=self.initial_state, actions=self.actions(self.initial_state))
-        for action in head.actions:
-            continue
-        return head
+
 
 
 

@@ -11,6 +11,7 @@ class Environment:
     def __init__(self, *args):
         self.allowed_agents = None
         self.agents = {}
+        self.actuators = set()
         self.space = None
         self.rules = None
 
@@ -23,7 +24,7 @@ class Environment:
 
     def start(self, steps=-1):
         """
-        time = time_unit_0 in whatever sense time_unit is implemented
+        time = time_unit_0 iren whatever sense time_unit is implemented
         :param steps: increments of time, if -1 go till infinity
         :return:
         """
@@ -76,6 +77,16 @@ class Environment:
 
     def assign_initial_local(self, agent):
         return
+
+    def result(self, state, action):
+        """
+        specifies transition model.
+        :param state:
+        :param action:
+        :return:
+        """
+        new_state = 0
+        return new_state
 
 
 class GridEnv2D(Environment):

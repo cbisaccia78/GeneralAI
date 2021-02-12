@@ -45,28 +45,29 @@ class BasicProblemSolver(Agent):
     def actions(self, state):
         return []
 
-    def bfsg(self, head, depth):
+    def _generate_state_space(self, starter, depth_limit):
+        curr = starter
+        curr.gen_future_states(actions=self.actions(self.initial_state), actuators=self.actuators)
+        depth = 1
+        while depth < depth_limit:
+            for node in curr.future_states:
+                node.gen_future_states(actions=self.actions(node.state), actuators=self.actuators)
+                if
+        return head
         """
-
         :param head:
         :param depth:
         :return:
         """
         return
 
-    def generate_state_space(self, depth=-1):
+    def generate_state_space(self, depth=-1, starter=None):
         """
         num_states = sum_i(sum_j(thing_ij * num_values_thing_ij*)) for j ranging over all things in state i
         :param depth: specifies how deep the state space tree will go. -1 for exhaustion
         :return:
         """
-        self.ss_head = StateNode(prev_state=None, state=self.initial_state)
-        self.bfsg()
-        head.gen_future_states(actions=self.actions(self.initial_state), actuators=self.actuators)
-        for state in head.future_states:
-            state.gen_future_states(actions=self.actions(state))
-            continue
-        return head
+        self.ss_head = self._generate_state_space(starter if starter else StateNode(prev_state=None, state=self.initial_state), depth)
 
     def search(self):
         """

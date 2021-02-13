@@ -45,15 +45,14 @@ class BasicProblemSolver(Agent):
     def actions(self, state):
         return []
 
-    def _generate_state_space(self, starter, depth_limit):
-        curr = starter
-        curr.gen_future_states(actions=self.actions(self.initial_state), actuators=self.actuators)
-        depth = 1
-        while depth < depth_limit:
-            for node in curr.future_states:
-                node.gen_future_states(actions=self.actions(node.state), actuators=self.actuators)
-                if
-        return head
+    def _generate_state_space(self, node, depth, depth_limit):
+        if depth == depth_limit:
+            return
+        node.gen_future_states(actions=self.actions(self.initial_state), actuators=self.actuators)
+        if not node.future_state_nodes:
+            return
+        for future_node in node.future_state_nodes:
+            self._generate_state_space(future_node)
         """
         :param head:
         :param depth:

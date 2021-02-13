@@ -36,8 +36,8 @@ class State:
         return False
 
 class StateNode:
-    def __init__(self, prev_state, state):
-        self.prev_state = prev_state
+    def __init__(self, prev_state_node, state):
+        self.prev_state_node = prev_state_node
         self.state = state
-        self.future_states = []
+        self.future_state_nodes = []
     def gen_future_states(self, actions, actuators):

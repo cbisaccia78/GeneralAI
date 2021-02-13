@@ -103,12 +103,19 @@ class BasicProblemSolver(Agent):
             self.state = self.actuators[action.actuator_name].act(action, self.state)
 
     def _search(self, node, depth, depth_limit):
+        goal = self.problem.test(node)
         if depth_limit:
             if depth == depth_limit:
-                return None
-        while (not self.problem.test(ptr.state)) and True:
-            return
-        return seq[0] if self.closed_loop else seq
+                return node if goal else None
+        if not node.future_state_nodes:
+            return node if goal else None
+        if goal:
+            return node
+        for fn in node.future_state_nodes:
+            found = self._search(fn, depth=depth+1, depth_limit=depth_limit)
+            if found:
+                return found
+        return None
 
     def search(self, depth=None):
         """
@@ -120,6 +127,9 @@ class BasicProblemSolver(Agent):
         """
         return self._search(self.curr_state_node, depth=0, depth_limit=depth)
 
+
+class BasicUtility(Agent):
+    pass
 
 
 class TableDrivenAgent(Agent):

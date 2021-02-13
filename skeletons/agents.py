@@ -3,7 +3,6 @@ from skeletons.states import StateNode
 from skeletons.sensors import Sensor, VacuumSensor
 
 
-
 class Agent:
     def __init__(self, name=None, environment=None):
         self.name = name

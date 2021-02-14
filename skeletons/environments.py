@@ -116,16 +116,22 @@ class Environment:
 
 
 class GridEnv2D(Environment):
-    def __init__(self, col, row, name=None):
+    def __init__(self, col, row, name=None, rules=None):
         self.name = name
         self.allowed_agents = {'BasicProblemSolver': col + row}
         self.agents = {}
-        self.agent_coords = set()
         self.state = State(things=[Grid2D(columns=col, rows=row)])
         self.max_x = col
         self.max_y = row
         self.rules = {self.on_board}
-
+        if rules:
+            for rule in rules:
+                self.rules.add(rule)
+    """
+    *
+    *
+    * rules:
+    """
     def on_board(self, state_node):
         if state_node is None or state_node.state is None or state_node.state.location is None:
             return False
@@ -137,11 +143,22 @@ class GridEnv2D(Environment):
                 return True
         return False
 
+    def one_agent_one_square(self, state_node):
+        # should we assume on_board rule has already been verified?
+        for key in self.agents:
+            for agent in self.agents[key]:
+                if state_node.state.location == agent.curr_state_node.state.location:
+                    return False
+        return True
+
     def for_util(self, num_rows, num_cols):
         for y in num_rows:
             for x in num_cols:
-                if (y,x) not in self.agent_coords:
-                    return (y,x)
+                for key in self.agents:
+                    for agent in self.agents[key]:
+                        if (y,x) == agent.curr_state_node.state.location:
+                            return None
+                return (y,x)
         return None
 
     def assign_location(self, agent):
@@ -174,9 +191,6 @@ class VacuumWorld(GridEnv2D):
         super().__init__(col, row, name)
         self.allowed_agents["Vacuum"] = col + row
         self.rules.add(self.one_agent_one_square)
-
-    def one_agent_one_square(self, state_node):
-        return True
 
     def result(self, state_node, action, actuator):
         new_state = actuator.act(action, state_node)

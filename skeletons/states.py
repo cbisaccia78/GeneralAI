@@ -42,16 +42,3 @@ class StateNode:
         self.prev_action = prev_action
         self.state = state
         self.future_state_nodes = []
-
-    def gen_future_states(self, actions, actuators):
-        for action in actions:
-            valid_actuator = None
-            for actuator in actuators:
-                if action in actuator.actions:
-                    valid_actuator = actuator
-                    break
-            if not valid_actuator:
-                continue
-            future_state = actuator.act(action)
-            if future_state:
-                self.future_state_nodes.append(StateNode(prev_state_node=self, prev_action=action, state=actuator.act(action)))

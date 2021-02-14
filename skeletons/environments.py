@@ -78,7 +78,7 @@ class Environment:
     def assign_initial_local(self, agent):
         return
 
-    def result(self, state, action, actuator):
+    def result(self, state_node, actions, actuators):
         """
         specifies transition model.
         :param state:
@@ -115,14 +115,36 @@ class GridEnv2D(Environment):
             self.agent_coords.add(loc)
         return loc
         """
-        THIS CODE COULD BE MORE EFFICIENT FOR MASSIVE GRIDS
-        
-        loc_found = False
-        while True:
-            loc_guess = (randint(0, num_rows-1), randint(0, num_cols-1))
-            if loc_guess not in self.agent_coords:
-                break
+            THIS CODE COULD BE MORE EFFICIENT FOR MASSIVE GRIDS
+
+            loc_found = False
+            while True:
+                loc_guess = (randint(0, num_rows-1), randint(0, num_cols-1))
+                if loc_guess not in self.agent_coords:
+                    break
         """
+
+    def result(self, state_node, actions, actuators):
+        """
+            specifies transition model.
+            :param state_node:
+            :param actions:
+            :param actuators:
+            :return: new_state_node
+        """
+        for action in actions:
+            valid_actuator = None
+            for actuator in actuators:
+                if action in actuator.actions:
+                    valid_actuator = actuator
+                    break
+            if not valid_actuator:
+                continue
+            future_state = actuator.act(action)
+            if future_state:
+                state_node.future_state_nodes.append(
+                    StateNode(prev_state_node=self, prev_action=action, state=actuator.act(action)))
+
 
     def assign_initial_state(self, agent):
         loc = self.assign_location(agent)

@@ -1,7 +1,7 @@
 from random import randint
 
 from skeletons.spaces import Grid2D
-from skeletons.agents import BasicProblemSolver
+from skeletons.states import State, StateNode
 import numpy as np
 
 from skeletons.states import State
@@ -78,11 +78,12 @@ class Environment:
     def assign_initial_local(self, agent):
         return
 
-    def result(self, state, action):
+    def result(self, state, action, actuator):
         """
         specifies transition model.
         :param state:
         :param action:
+        :param actuator:
         :return:
         """
         new_state = 0
@@ -109,7 +110,7 @@ class GridEnv2D(Environment):
     def assign_location(self, agent):
         # find empty x loc
         env_dims = self.state.Grid2D.shape
-        loc =  self.for_util(env_dims[0], env_dims[1])
+        loc = self.for_util(env_dims[0], env_dims[1])
         if loc:
             self.agent_coords.add(loc)
         return loc
@@ -124,9 +125,11 @@ class GridEnv2D(Environment):
         """
 
     def assign_initial_state(self, agent):
-        return self.assign_location(agent)
+        loc = self.assign_location(agent)
+        return StateNode(prev_state_node=None, prev_action=None, state=loc) if loc else None
 
     def assign_initial_local(self, agent):
+
         return
 
 

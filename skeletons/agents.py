@@ -10,8 +10,7 @@ class Agent:
         self.percept_history = []
         self.actuators = None
         self.environment = environment
-        self.state, self.local_env = self.notify_env()
-        self.curr_state_node = StateNode(None, self.state)
+        self.curr_state_node, self.local_env = self.notify_env()
         self.ss_head = None
 
     def __repr__(self):
@@ -40,7 +39,7 @@ class BasicProblemSolver(Agent):
     def __init__(self, environment=None, name=None,  closed_loop=True, goal_states=None, step_cost=None):
         super(BasicProblemSolver, self).__init__(name, environment)
         self.closed_loop = closed_loop  # AKA: self.eyes_open = eyes_open
-        self.problem = Problem(initial_state=self.state, goal_states=goal_states, step_cost=step_cost)
+        self.problem = Problem(initial_state=self.curr_state_node.state, goal_states=goal_states, step_cost=step_cost)
 
     def actions(self, state):
         return []
@@ -49,7 +48,7 @@ class BasicProblemSolver(Agent):
         if depth_limit:
             if depth == depth_limit:
                 return
-        node.gen_future_states(actions=self.actions(self.curr_state_node.state), actuators=self.actuators)
+        node.future_state_nodes = self.local_env.result(node, actions=self.actions(self.curr_state_node.state), actuators=self.actuators)
         if not node.future_state_nodes:
             return
         for future_node in node.future_state_nodes:
@@ -82,8 +81,8 @@ class BasicProblemSolver(Agent):
         Once called, it goes through a loop of sense -> act -> update -> goal_test
         """
         self.generate_state_space(starter=self.ss_head)
-        self.state = self.ss_head.state
-        while not self.problem.test(self.state):
+        self.curr_state_node = self.ss_head
+        while not self.problem.test(self.curr_state_node.state):
             precepts = self.sense()
             self.act(precepts)
         return True
@@ -99,7 +98,7 @@ class BasicProblemSolver(Agent):
         self.percept_history.append(percepts)
         action = self.search()
         if action:
-            self.state = self.actuators[action.actuator_name].act(action, self.state)
+            self.curr_state_node = StateNode(prev_state_node=self.curr_state_node, prev_action=action, state=self.actuators[action.actuator_name].act(action, self.curr_state_node.state))
 
     def _search(self, node, depth, depth_limit):
         goal = self.problem.test(node)

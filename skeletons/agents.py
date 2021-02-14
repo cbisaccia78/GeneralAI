@@ -118,7 +118,7 @@ class BasicProblemSolver(Agent):
 
     def search(self, depth=None):
         """
-        :makes use of self.problem: provides filtering of environment into a relevant set of features (state space),
+        makes use of self.problem: provides filtering of environment into a relevant set of features (state space),
         coupled with a path cost function, a goal evaluation function, and much much more!
         Can currently only search from the agents current state.
         :param depth: if depth == None then it searches the whole state space

@@ -78,16 +78,41 @@ class Environment:
     def assign_initial_local(self, agent):
         return
 
-    def result(self, state_node, actions, actuators):
+    def passes(self, state_node, rule):
+        return True
+
+    def valid(self, state_node):
+        for rule in self.rules:
+            if not self.passes(state_node, rule):
+                return False
+        return True
+
+    def result(self, state_node, action, actuator):
+        new_state = actuator.act(action, state_node)
+        if self.valid(new_state):
+            return new_state
+        return None
+
+    def gen_future_states(self, state_node, actions, actuators):
         """
-        specifies transition model.
-        :param state:
-        :param action:
-        :param actuator:
-        :return:
+            specifies transition model.
+            :param state_node:
+            :param actions:
+            :param actuators:
+            :return: new_state_node
         """
-        new_state = 0
-        return new_state
+        for action in actions:
+            valid_actuator = None
+            for actuator in actuators:
+                if action in actuator.actions:
+                    valid_actuator = actuator
+                    break
+            if not valid_actuator:
+                continue
+            future_state = self.result(state_node=state_node, action=action, actuator=valid_actuator)
+            if future_state:
+                state_node.future_state_nodes.append(
+                    StateNode(prev_state_node=self, prev_action=action, state=future_state))
 
 
 class GridEnv2D(Environment):
@@ -124,26 +149,7 @@ class GridEnv2D(Environment):
                     break
         """
 
-    def result(self, state_node, actions, actuators):
-        """
-            specifies transition model.
-            :param state_node:
-            :param actions:
-            :param actuators:
-            :return: new_state_node
-        """
-        for action in actions:
-            valid_actuator = None
-            for actuator in actuators:
-                if action in actuator.actions:
-                    valid_actuator = actuator
-                    break
-            if not valid_actuator:
-                continue
-            future_state = actuator.act(action)
-            if future_state:
-                state_node.future_state_nodes.append(
-                    StateNode(prev_state_node=self, prev_action=action, state=actuator.act(action)))
+
 
 
     def assign_initial_state(self, agent):

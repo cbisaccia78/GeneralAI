@@ -48,7 +48,7 @@ class BasicProblemSolver(Agent):
         if depth_limit:
             if depth == depth_limit:
                 return
-        node.future_state_nodes = self.local_env.result(node, actions=self.actions(self.curr_state_node.state), actuators=self.actuators)
+        node.future_state_nodes = self.local_env.gen_future_states(state_node=node, actions=self.actions(self.curr_state_node.state), actuators=self.actuators)
         if not node.future_state_nodes:
             return
         for future_node in node.future_state_nodes:

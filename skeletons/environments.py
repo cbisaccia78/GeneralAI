@@ -79,7 +79,7 @@ class Environment:
         return
 
     def passes(self, state_node, rule):
-        return True
+        return rule(state_node)
 
     def valid(self, state_node):
         for rule in self.rules:
@@ -122,14 +122,26 @@ class GridEnv2D(Environment):
         self.agents = {}
         self.agent_coords = set()
         self.state = State(things=[Grid2D(columns=col, rows=row)])
-        self.rules = []
+        self.max_x = col
+        self.max_y = row
+        self.rules = {self.on_board}
+
+    def on_board(self, state_node):
+        if state_node is None or state_node.state is None or state_node.state.location is None:
+            return False
+        loc = state_node.state.location
+        x = loc[0]
+        y = loc[1]
+        if 0 < x < self.max_x:
+            if 0 < y < self.max_y:
+                return True
+        return False
 
     def for_util(self, num_rows, num_cols):
         for y in num_rows:
             for x in num_cols:
                 if (y,x) not in self.agent_coords:
                     return (y,x)
-
         return None
 
     def assign_location(self, agent):
@@ -149,21 +161,27 @@ class GridEnv2D(Environment):
                     break
         """
 
-
-
-
     def assign_initial_state(self, agent):
         loc = self.assign_location(agent)
         return StateNode(prev_state_node=None, prev_action=None, state=loc) if loc else None
 
     def assign_initial_local(self, agent):
-
         return
 
 
 class VacuumWorld(GridEnv2D):
     def __init__(self, col, row, name=None):
         super().__init__(col, row, name)
-        self.world = [np.arange(col*row).reshape(row, col)]
         self.allowed_agents["Vacuum"] = col + row
+        self.rules.add(self.one_agent_one_square)
+
+    def one_agent_one_square(self, state_node):
+        return True
+
+    def result(self, state_node, action, actuator):
+        new_state = actuator.act(action, state_node)
+        if self.valid(new_state):
+            return new_state
+        return None
+
 

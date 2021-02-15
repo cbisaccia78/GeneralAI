@@ -38,7 +38,6 @@ class Problem:
         self.initial_state = initial_state
         self.goal_states = goal_states
         self.step_cost = step_cost
-        self.state_space_head = self.generate_state_space()
 
     def path_cost(self, path):
         """

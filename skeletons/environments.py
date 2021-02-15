@@ -78,6 +78,18 @@ class Environment:
     def assign_initial_local(self, agent):
         return
 
+    def handle_actuator(self, state_node, action, actuator):
+        """
+        This function will need to be overridden for every specific environment
+        :param state_node:
+        :param action:
+        :param actuator:
+        :return:
+        """
+        new_state = None
+
+        return StateNode(state_node, action, new_state)
+
     def passes(self, state_node, rule):
         return rule(state_node)
 
@@ -88,9 +100,9 @@ class Environment:
         return True
 
     def result(self, state_node, action, actuator):
-        new_state = actuator.act(action, state_node)
-        if self.valid(new_state):
-            return new_state
+        new_state_node = self.handle_actuator(state_node=state_node, action=action, actuator=actuator)
+        if self.valid(new_state_node):
+            return new_state_node
         return None
 
     def gen_future_states(self, state_node, actions, actuators):
@@ -109,10 +121,9 @@ class Environment:
                     break
             if not valid_actuator:
                 continue
-            future_state = self.result(state_node=state_node, action=action, actuator=valid_actuator)
-            if future_state:
-                state_node.future_state_nodes.append(
-                    StateNode(prev_state_node=self, prev_action=action, state=future_state))
+            future_state_node = self.result(state_node=state_node, action=action, actuator=valid_actuator)
+            if future_state_node:
+                state_node.future_state_nodes.append(future_state_node)
 
 
 class GridEnv2D(Environment):
@@ -156,9 +167,8 @@ class GridEnv2D(Environment):
             for x in num_cols:
                 for key in self.agents:
                     for agent in self.agents[key]:
-                        if (y,x) == agent.curr_state_node.state.location:
-                            return None
-                return (y,x)
+                        if (y,x) != agent.curr_state_node.state.location:
+                            return (y,x)
         return None
 
     def assign_location(self, agent):
@@ -184,6 +194,11 @@ class GridEnv2D(Environment):
 
     def assign_initial_local(self, agent):
         return
+
+    def handle_actuator(self, state_node, action, actuator):
+        new_state = actuator.act(action=action, state_node=state_node)
+        # have the environment perform checks on the new state,
+        # possibly contain a list of actuators and handlers for each actuator
 
 
 class VacuumWorld(GridEnv2D):

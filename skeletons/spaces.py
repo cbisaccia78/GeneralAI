@@ -11,7 +11,7 @@ class Grid2D(Space):
         self.name = 'Grid'
         self.c = columns
         self.r = rows
-        self.grid = np.zeros(shape=(rows, columns))
+        self.grid = np.empty(shape=(rows, columns))
 
     def __repr__(self):
         return self.__class__.__name__

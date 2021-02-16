@@ -205,7 +205,8 @@ class GridEnv2D(Environment):
         agent_loc = agent.curr_state_node.state.Location
         local = GridEnv2D(col=dims[0], row=dims[1])
         local.state.Grid2D.grid[agent_loc[0]][agent_loc[1]] = self.state.Grid2D.grid[agent_loc[0]][agent_loc[1]]
-        return
+        local.agents[repr(agent)] = [agent]
+        return local
 
     def randomize_grid(self):
         dims = self.state.Grid2D.grid.shape

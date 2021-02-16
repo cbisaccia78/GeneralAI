@@ -195,7 +195,19 @@ class GridEnv2D(Environment):
         return StateNode(prev_state_node=None, prev_action=None, state=loc_state) if loc else None
 
     def assign_initial_local(self, agent):
+        """
+        shear off all space information except in the location that
+        the agent currently resides and return new env
+        :param agent:
+        :return: subspace of the global environment containing only the agent
+        """
+        dims = self.state.Grid2D.grid.shape
+        local = GridEnv2D(col=dims[0], row=dims[1])
         return
+
+    def randomize_grid(self):
+        dims = self.state.Grid2D.grid.shape
+        self.state.Grid2D.grid = np.random.default_rng().integers(2, size=(dims[0], dims[1]))
 
     def handle_actuator(self, state_node, action, actuator):
         new_state = actuator.act(action=action, state_node=state_node)
@@ -206,12 +218,18 @@ class GridEnv2D(Environment):
 class VacuumWorld(GridEnv2D):
     def __init__(self, col, row, name=None):
         super().__init__(col, row, name)
+        self.randomize_grid()
         self.allowed_agents["Vacuum"] = col + row
         self.rules.add(self.one_agent_one_square)
 
     def assign_initial_state(self, agent):
-        super(VacuumWorld, self).assign_initial_state(agent) # agent will have a location
-        agent_loc = agent.curr_state_node.state.Location
-        agent.curr_state_node.state.is_dirty = self.space[agent_loc[]]
+        node = super(VacuumWorld, self).assign_initial_state(agent) # agent will have a location
+        agent_loc = node.state.Location
+        """
+        following code assumes that space contains dirt only. need to modify
+        for grid locations which can contain more than one thing.
+        """
+        node.state.on_dirt = self.space[agent_loc[0]][agent_loc[1]]
+        return node
 
 

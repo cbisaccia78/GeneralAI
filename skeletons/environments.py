@@ -5,6 +5,7 @@ from skeletons.states import State, StateNode
 import numpy as np
 
 from skeletons.states import State
+from skeletons.things import Thing
 
 
 class Environment:
@@ -190,7 +191,8 @@ class GridEnv2D(Environment):
 
     def assign_initial_state(self, agent):
         loc = self.assign_location(agent)
-        return StateNode(prev_state_node=None, prev_action=None, state=loc) if loc else None
+        loc_state = State(things=[Thing(name="Location", data=loc)])
+        return StateNode(prev_state_node=None, prev_action=None, state=loc_state) if loc else None
 
     def assign_initial_local(self, agent):
         return
@@ -207,10 +209,9 @@ class VacuumWorld(GridEnv2D):
         self.allowed_agents["Vacuum"] = col + row
         self.rules.add(self.one_agent_one_square)
 
-    def result(self, state_node, action, actuator):
-        new_state = actuator.act(action, state_node)
-        if self.valid(new_state):
-            return new_state
-        return None
+    def assign_initial_state(self, agent):
+        super(VacuumWorld, self).assign_initial_state(agent) # agent will have a location
+        agent_loc = agent.curr_state_node.state.Location
+        agent.curr_state_node.state.is_dirty = self.space[agent_loc[]]
 
 

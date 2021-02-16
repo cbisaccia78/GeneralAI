@@ -10,7 +10,8 @@ class Agent:
         self.percept_history = []
         self.actuators = None
         self.environment = environment
-        self.curr_state_node, self.local_env = self.notify_env()
+        self.curr_state_node = self.get_initial_state
+        self.local_env = self.get_local_env() if self.curr_state_node else None
         self.ss_head = None
 
     def __repr__(self):
@@ -20,10 +21,14 @@ class Agent:
         self.percept_history.extend(percepts)
         self.local_env.update_state(percepts)
 
-    def notify_env(self):
+    def get_initial_state(self):
         if self.environment:
             self.environment.add_agents(self)
-            return self.environment.assign_initial_state(self), self.environment.assign_initial_local(self)
+            return self.environment.assign_initial_state(self)
+
+    def get_local_env(self):
+        if self.environment:
+            return self.environment.assign_initial_local(self)
 
     def sense(self):
         precepts = []

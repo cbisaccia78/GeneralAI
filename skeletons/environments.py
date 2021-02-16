@@ -202,7 +202,9 @@ class GridEnv2D(Environment):
         :return: subspace of the global environment containing only the agent
         """
         dims = self.state.Grid2D.grid.shape
+        agent_loc = agent.curr_state_node.state.Location
         local = GridEnv2D(col=dims[0], row=dims[1])
+        local.state.Grid2D.grid[agent_loc[0]][agent_loc[1]] = self.state.Grid2D.grid[agent_loc[0]][agent_loc[1]]
         return
 
     def randomize_grid(self):

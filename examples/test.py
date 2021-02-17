@@ -25,4 +25,4 @@ def test_state():
     print(state1 == state2)
 
 
-test_state()
+init_world()

@@ -3,8 +3,8 @@ import numpy as np
 
 
 class Thing:
-    def __init__(self, name, data=None):
-        self.name = name
+    def __init__(self, name=None, data=None):
+        self.name = name if name else repr(data)
         self.data = data
         return
 

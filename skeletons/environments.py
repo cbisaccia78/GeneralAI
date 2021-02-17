@@ -164,8 +164,10 @@ class GridEnv2D(Environment):
         return True
 
     def for_util(self, num_rows, num_cols):
-        for y in num_rows:
-            for x in num_cols:
+        if not self.agents:
+            return (randint(0,num_rows-1), randint(0,num_cols-1))
+        for y in range(0,num_rows):
+            for x in range(0,num_cols):
                 for key in self.agents:
                     for agent in self.agents[key]:
                         if (y,x) != agent.curr_state_node.state.location:
@@ -174,10 +176,8 @@ class GridEnv2D(Environment):
 
     def assign_location(self, agent):
         # find empty x loc
-        env_dims = self.state.Grid2D.shape
-        loc = self.for_util(env_dims[0], env_dims[1])
-        if loc:
-            self.agent_coords.add(loc)
+        env_dims = (self.max_x, self.max_y)
+        loc = self.for_util(num_rows=env_dims[1], num_cols=env_dims[0])
         return loc
         """
             THIS CODE COULD BE MORE EFFICIENT FOR MASSIVE GRIDS
@@ -192,6 +192,7 @@ class GridEnv2D(Environment):
     def assign_initial_state(self, agent):
         loc = self.assign_location(agent)
         loc_state = State(things=[Thing(name="Location", data=loc)])
+        self.add_agents(agent)
         return StateNode(prev_state_node=None, prev_action=None, state=loc_state) if loc else None
 
     def assign_initial_local(self, agent):
@@ -202,7 +203,7 @@ class GridEnv2D(Environment):
         :return: subspace of the global environment containing only the agent
         """
         dims = self.state.Grid2D.grid.shape
-        agent_loc = agent.curr_state_node.state.Location
+        agent_loc = agent.curr_state_node.state.Location.data
         local = GridEnv2D(col=dims[0], row=dims[1])
         local.state.Grid2D.grid[agent_loc[0]][agent_loc[1]] = self.state.Grid2D.grid[agent_loc[0]][agent_loc[1]]
         local.agents[repr(agent)] = [agent]

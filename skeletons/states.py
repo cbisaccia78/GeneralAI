@@ -1,5 +1,3 @@
-from skeletons.things import Thing
-
 
 class State:
     """
@@ -11,7 +9,7 @@ class State:
     def __init__(self, name=None, things=None):
         self.name = name
         for thing in things:
-            setattr(self, thing.name, thing)
+            setattr(self, thing.name if hasattr(thing, 'name') else repr(thing), thing)
 
     def __eq__(self, other):
         if not (State.sub_state(self, other) and State.sub_state(other, self)):

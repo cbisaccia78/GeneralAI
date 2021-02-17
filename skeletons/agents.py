@@ -10,7 +10,7 @@ class Agent:
         self.percept_history = []
         self.actuators = None
         self.environment = environment
-        self.curr_state_node = self.get_initial_state
+        self.curr_state_node = self.get_initial_state()
         self.local_env = self.get_local_env() if self.curr_state_node else None
         self.ss_head = None
 
@@ -23,7 +23,6 @@ class Agent:
 
     def get_initial_state(self):
         if self.environment:
-            self.environment.add_agents(self)
             return self.environment.assign_initial_state(self)
 
     def get_local_env(self):

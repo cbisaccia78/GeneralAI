@@ -14,7 +14,7 @@ class Action:
         return self.__class__.__name__
 
     def __eq__(self, other):
-        return repr(self) == repr(other)
+        return self.__repr__() == repr(other)
 
 
 class Left(Action):

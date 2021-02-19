@@ -1,6 +1,7 @@
 from skeletons.environments import GridEnv2D
 from skeletons.agents import BasicProblemSolver
 from skeletons.helpers import manhattan
+from skeletons.actuators import Mover
 import numpy as np
 from skeletons.things import Thing
 from skeletons.states import State
@@ -16,6 +17,7 @@ def init_world():
         name=('solver' + str(i)),
         environment=world,
         goal_states=[np.zeros((col, row))],
+        actuators=[Mover()],
         step_cost=manhattan) for i in range(0, num_agents)]
     agents[0].agent_program()
 

@@ -42,8 +42,18 @@ class BasicProblemSolver(Agent):
     """
     Searches sequentially at each layer for a solution to specified problem in particular environment
     """
-    def __init__(self, environment=None, name=None,  closed_loop=True, goal_states=None, step_cost=None):
+    def __init__(
+            self, environment=None,
+            name=None,
+            closed_loop=True,
+            goal_states=None,
+            step_cost=None,
+            actuators=None,
+            sensors=None
+    ):
         super(BasicProblemSolver, self).__init__(name, environment)
+        self.actuators = actuators
+        self.sensors = sensors
         self.closed_loop = closed_loop  # AKA: self.eyes_open = eyes_open
         self.problem = Problem(initial_state=self.curr_state_node.state, goal_states=goal_states, step_cost=step_cost)
 

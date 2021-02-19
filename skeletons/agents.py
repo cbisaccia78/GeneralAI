@@ -1,4 +1,6 @@
+from skeletons.actions import Left, Right, Up, Down
 from skeletons.problems import Problem
+from skeletons.spaces import Grid2D
 from skeletons.states import StateNode
 from skeletons.sensors import Sensor, VacuumSensor
 
@@ -46,7 +48,11 @@ class BasicProblemSolver(Agent):
         self.problem = Problem(initial_state=self.curr_state_node.state, goal_states=goal_states, step_cost=step_cost)
 
     def actions(self, state):
-        return []
+        properties = [prop for prop in vars(state) if not prop.startswith(("__"))]
+        action_list = []
+        for prop in properties:
+            if isinstance(state.prop, (Grid2D)):
+                action_list.extend([Left, Right, Up, Down])
 
     def _generate_state_space(self, node, depth, depth_limit):
         if depth_limit:
@@ -74,7 +80,7 @@ class BasicProblemSolver(Agent):
         if starter:
             initial = starter
         else:
-            self.ss_head = StateNode(prev_state_node=None, state=self.curr_state_node.state)
+            self.ss_head = StateNode(prev_state_node=None, prev_action=None, state=self.curr_state_node.state)
             initial = self.ss_head
 
         self._generate_state_space(initial, depth=0, depth_limit=depth)

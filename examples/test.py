@@ -11,6 +11,7 @@ num_agents = 1
 
 def init_world():
     world = GridEnv2D(name='Vacuum World', col=col, row=row)
+    world.randomize_grid()
     agents = [BasicProblemSolver(
         name=('solver' + str(i)),
         environment=world,

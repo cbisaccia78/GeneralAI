@@ -10,7 +10,7 @@ class Grid2D(Space):
     def __init__(self, columns, rows):
         self.c = columns
         self.r = rows
-        self.grid = np.empty(shape=(rows, columns))
+        self.grid = np.zeros(shape=(rows, columns))
 
     def __repr__(self):
         return Grid2D.__name__

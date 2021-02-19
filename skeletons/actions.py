@@ -8,10 +8,6 @@ class Action:
                 which will be interpreted by the arm.
     """
     def __init__(self):
-        """
-            actuators: a list of actuator classes which support implementation of the action
-        """
-        self.actuators = None
         return
 
     def __repr__(self):
@@ -23,20 +19,35 @@ class Action:
 
 class Left(Action):
     def __init__(self, units):
+        self.units = units
         return
+
+    def __repr__(self):
+        return "Left"
 
 
 class Right(Action):
     def __init__(self, units):
+        self.units = units
         return
+
+    def __repr__(self):
+        return "Right"
 
 
 class Up(Action):
     def __init__(self, units):
+        self.units = units
         return
+
+    def __repr__(self):
+        return "Up"
 
 
 class Down(Action):
     def __init__(self, units):
+        self.units = units
         return
 
+    def __repr__(self):
+        return "Down"

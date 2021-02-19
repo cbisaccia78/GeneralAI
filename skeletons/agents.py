@@ -51,8 +51,9 @@ class BasicProblemSolver(Agent):
         properties = [prop for prop in vars(state) if not prop.startswith(("__"))]
         action_list = []
         for prop in properties:
-            if isinstance(state.prop, (Grid2D)):
+            if prop == "Location":
                 action_list.extend([Left, Right, Up, Down])
+        return action_list
 
     def _generate_state_space(self, node, depth, depth_limit):
         if depth_limit:

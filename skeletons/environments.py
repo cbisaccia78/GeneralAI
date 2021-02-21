@@ -117,7 +117,8 @@ class Environment:
         for action in actions:
             valid_actuator = None
             for actuator in actuators:
-                if action in actuator.actions:
+                rep = repr(action)
+                if rep in actuator.actions:
                     valid_actuator = actuator
                     break
             if not valid_actuator:

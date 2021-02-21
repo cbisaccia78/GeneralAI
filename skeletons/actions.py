@@ -1,4 +1,4 @@
-class Action:
+class Action(object):
     """
         In the context of the brain-arm-bottle example:
              - The action is characterized by information within the electrical impulses sent to the arm over
@@ -7,47 +7,28 @@ class Action:
                 and moving the arm back. In this way the action can be defined as a time-based sequence of 'directives'
                 which will be interpreted by the arm.
     """
-    def __init__(self):
-        return
 
     def __repr__(self):
-        return self.__class__.__name__
+        return "'" + type(self).__name__ + "'"
 
     def __eq__(self, other):
-        return self.__repr__() == repr(other)
+        return repr(self) == repr(other)
+
+    def __init__(self, units=None):
+        self.units = units
 
 
 class Left(Action):
-    def __init__(self, units):
-        self.units = units
-        return
-
-    def __repr__(self):
-        return "Left"
+    pass
 
 
 class Right(Action):
-    def __init__(self, units):
-        self.units = units
-        return
-
-    def __repr__(self):
-        return "Right"
+    pass
 
 
 class Up(Action):
-    def __init__(self, units):
-        self.units = units
-        return
-
-    def __repr__(self):
-        return "Up"
+    pass
 
 
 class Down(Action):
-    def __init__(self, units):
-        self.units = units
-        return
-
-    def __repr__(self):
-        return "Down"
+    pass

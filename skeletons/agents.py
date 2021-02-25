@@ -98,8 +98,7 @@ class BasicProblemSolver(Agent):
 
     def agent_program(self):
         """
-        Once the agent is instantiated this method can be called.
-        Once called, it goes through a loop of sense -> act -> update -> goal_test
+        Once called, agent goes through a loop of sense <-> act <-> goal_test
         """
         self.generate_state_space(starter=self.ss_head)
         self.curr_state_node = self.ss_head

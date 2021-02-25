@@ -2,6 +2,7 @@ from skeletons.actions import Left, Right, Up, Down
 from skeletons.problems import Problem
 from skeletons.spaces import Grid2D
 from skeletons.states import StateNode
+from skeletons.percepts import Percepts
 from skeletons.sensors import Sensor, VacuumSensor
 
 
@@ -9,7 +10,7 @@ class Agent:
     def __init__(self, name=None, environment=None):
         self.name = name
         self.sensors = None
-        self.percept_history = []
+        self.percept_history = Percepts()
         self.actuators = None
         self.environment = environment
         self.curr_state_node = self.get_initial_state()
@@ -37,10 +38,12 @@ class Agent:
         ie) location and time indexing:   percepts = {(loc_1, 1) : sense_1, . . . , (loc_n, n) : sense_n}
         :return:
         """
-        precepts = []
         for sensor in self.sensors:
-            precepts.append({self.curr_state_node.state}: sensor.sense()})
-        return precepts
+            self.precepts.add(
+                percept=sensor.sense(),
+                location=self.curr_state_node.state.location,
+                time=self.local_env.time
+            )
 
 
 class BasicProblemSolver(Agent):
@@ -108,11 +111,11 @@ class BasicProblemSolver(Agent):
         self.generate_state_space(starter=self.ss_head)
         self.curr_state_node = self.ss_head
         while not self.problem.test(self.curr_state_node.state):
-            precepts = self.sense()
-            self.act(precepts)
+            self.sense()
+            self.act()
         return True
 
-    def act(self, percepts):
+    def act(self):
         """
         add the percepts to the agents history,
         then search the state space for action(s) which will satisfy goal
@@ -120,10 +123,16 @@ class BasicProblemSolver(Agent):
         :param percepts:
         :return:
         """
-        self.percept_history.append(percepts)
         action = self.search()
         if action:
-            self.curr_state_node = StateNode(prev_state_node=self.curr_state_node, prev_action=action, state=self.actuators[action.actuator_name].act(action, self.curr_state_node.state))
+            self.curr_state_node = StateNode(
+                prev_state_node=self.curr_state_node,
+                prev_action=action,
+                state=self.actuators[action.actuator_name].act(
+                    action,
+                    self.curr_state_node.state
+                )
+            )
 
     def _search(self, node, depth, depth_limit):
         goal = self.problem.test(node)

@@ -35,3 +35,17 @@ class Mover(Actuator):
         else:
             return None
 
+
+class Sucker(Actuator):
+    def __init__(self):
+        super(Sucker, self).__init__()
+        self.actions.add('Suck')
+
+    def act(self, action, state):
+        if state.on_dirt:
+            state.on_dirt = 0
+            return state
+        return state
+
+
+

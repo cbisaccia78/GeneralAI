@@ -12,23 +12,57 @@ class Action(object):
         return "'" + type(self).__name__ + "'"
 
     def __eq__(self, other):
-        return repr(self) == repr(other)
+        return repr(self) == other
 
-    def __init__(self, units=None):
-        self.units = units
+    def __init__(self, name=None):
+        self.name = name
 
 
 class Left(Action):
-    pass
+    name = 'Left'
+
+    def __str__(self):
+        return 'Left'
+
+    def __repr__(self):
+        return str(self)
 
 
 class Right(Action):
-    pass
+    name = 'Right'
+
+    def __str__(self):
+        return 'Right'
+
+    def __repr__(self):
+        return str(self)
 
 
 class Up(Action):
-    pass
+    name = 'Up'
+
+    def __str__(self):
+        return 'Up'
+
+    def __repr__(self):
+        return str(self)
 
 
 class Down(Action):
-    pass
+    name = 'Down'
+
+    def __str__(self):
+        return 'Down'
+
+    def __repr__(self):
+        return str(self)
+
+
+class Suck(Action):
+    name = 'Suck'
+
+    def __str__(self):
+        return 'Suck'
+
+    def __repr__(self):
+        return str(self)

@@ -87,9 +87,7 @@ class Environment:
         :param actuator:
         :return:
         """
-        new_state = None
-
-        return StateNode(state_node, action, new_state)
+        return state_node
 
     def passes(self, state_node, rule):
         return rule(state_node)
@@ -117,8 +115,7 @@ class Environment:
         for action in actions:
             valid_actuator = None
             for actuator in actuators:
-                rep = repr(action)
-                if rep in actuator.actions:
+                if action.name in actuator.actions:
                     valid_actuator = actuator
                     break
             if not valid_actuator:
@@ -132,6 +129,7 @@ class GridEnv2D(Environment):
     def __init__(self, col, row, name=None, rules=None):
         self.name = name
         self.allowed_agents = {'BasicProblemSolver': col + row}
+        self.allowed_actions = {'Left', 'Right', 'Up', 'Down'}
         self.agents = {}
         self.state = State(things=[Grid2D(columns=col, rows=row)])
         self.max_x = col
@@ -215,8 +213,11 @@ class GridEnv2D(Environment):
         self.state.Grid2D.grid = np.random.default_rng().integers(2, size=(dims[0], dims[1]))
 
     def handle_actuator(self, state_node, action, actuator):
-        new_state = actuator.act(action=action, state_node=state_node)
-        # have the environment perform checks on the new state,
+        if action.name in self.allowed_actions:
+            new_state = actuator.act(action=action, state=state_node)
+        else:
+            new_state = super(GridEnv2D, self).handle_actuator(state_node, action, actuator)
+        return new_state
         # possibly contain a list of actuators and handlers for each actuator
 
 
@@ -225,6 +226,7 @@ class VacuumWorld(GridEnv2D):
         super().__init__(col, row, name)
         self.randomize_grid()
         self.allowed_agents["Vacuum"] = col + row
+        self.allowed_actions = {'Suck'}
         self.rules.add(self.one_agent_one_square)
 
     def assign_initial_state(self, agent):
@@ -237,4 +239,11 @@ class VacuumWorld(GridEnv2D):
         node.state.on_dirt = self.space[agent_loc[0]][agent_loc[1]]
         return node
 
+    def handle_actuator(self, state_node, action, actuator):
+        if action.name in self.allowed_actions:
+            new_state = actuator.act(action=action, state=state_node)
+        else:
+            new_state = super(VacuumWorld, self).handle_actuator(state_node, action, actuator)
+
+        return new_state
 

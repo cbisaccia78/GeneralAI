@@ -242,6 +242,7 @@ class VacuumWorld(GridEnv2D):
     def handle_actuator(self, state_node, action, actuator):
         if action.name in self.allowed_actions:
             new_state = actuator.act(action=action, state=state_node)
+            self.space[new_state.location[0]][new_state.location[1]] = new_state.on_dirt
         else:
             new_state = super(VacuumWorld, self).handle_actuator(state_node, action, actuator)
 

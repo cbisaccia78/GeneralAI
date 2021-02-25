@@ -32,9 +32,14 @@ class Agent:
             return self.environment.assign_initial_local(self)
 
     def sense(self):
+        """
+        try to make agents state hashable by environment properties:
+        ie) location and time indexing:   percepts = {(loc_1, 1) : sense_1, . . . , (loc_n, n) : sense_n}
+        :return:
+        """
         precepts = []
         for sensor in self.sensors:
-            precepts.append(sensor.precepts)
+            precepts.append({self.curr_state_node.state}: sensor.sense()})
         return precepts
 
 

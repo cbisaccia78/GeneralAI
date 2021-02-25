@@ -11,14 +11,7 @@ ________________________________________________________________________________
 Goal Functions
 """
 
-class TupleHash(object):
-    def __init__(self):
 
-
-class Percepts(object):
-    def __init__(self):
-        self.location_hash = TupleHash()
-        self.time_hash = {}
 
 
 

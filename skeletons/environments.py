@@ -125,11 +125,11 @@ class Environment:
             if not valid_actuator:
                 continue
             future_state_node = self.result(state_node=state_node, action=action, actuator=valid_actuator)
-            if future_state_node and future_state_node not in self.ss_set:
+            if future_state_node and not State.is_in(future_state_node.state, self.ss_set):
                 future_state_node.prev_action = action
                 future_state_node.prev_state_node = state_node
                 state_node.future_state_nodes.append(future_state_node)
-                self.ss_set.add(future_state_node)
+                self.ss_set.add(future_state_node.state)
 
     def _generate_state_space(self, node, depth, depth_limit):
         if depth_limit:
@@ -163,6 +163,7 @@ class Environment:
         if method:
             self.ss_head = method(agent.curr_state_node, args)
         self._generate_state_space(self.ss_head, depth=0, depth_limit=depth)
+        self.ss_set = set()
         return copy(self.ss_head)
 
 

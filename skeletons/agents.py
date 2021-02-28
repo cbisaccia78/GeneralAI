@@ -74,42 +74,11 @@ class BasicProblemSolver(Agent):
                 action_list.extend([Left(), Right(), Up(), Down()])
         return action_list
 
-    def _generate_state_space(self, node, depth, depth_limit):
-        if depth_limit:
-            if depth == depth_limit:
-                return
-        self.local_env.gen_future_states(state_node=node, actions=self.actions(self.curr_state_node.state), actuators=self.actuators)
-        if not node.future_state_nodes:
-            return
-        for future_node in node.future_state_nodes:
-            self._generate_state_space(future_node, depth=depth+1, depth_limit=depth_limit)
-        """
-        :param head:
-        :param depth:
-        :return:
-        """
-        return
-
-    def generate_state_space(self, depth=None, starter=None):
-        """
-        num_states = sum_i(sum_j(thing_ij * num_values_thing_ij*)) for j ranging over all things in state i
-        :param starter: initial node
-        :param depth: specifies how deep the state space tree will go. None for exhaustion
-        :return:
-        """
-        if starter:
-            initial = starter
-        else:
-            self.ss_head = StateNode(prev_state_node=None, prev_action=None, state=self.curr_state_node.state)
-            initial = self.ss_head
-
-        self._generate_state_space(initial, depth=0, depth_limit=depth)
-
     def agent_program(self):
         """
         Once called, agent goes through a loop of sense <-> act <-> goal_test
         """
-        self.generate_state_space(starter=self.curr_state_node)
+        self.local_env.generate_state_space(self)
         while not self.problem.test(self.curr_state_node.state):
             self.sense()
             self.act()

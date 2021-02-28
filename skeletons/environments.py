@@ -13,10 +13,12 @@ class Environment:
     def __init__(self, *args):
         self.allowed_agents = None
         self.agents = {}
+        self.local_agent = None
         self.actuators = set()
         self.space = None
         self.rules = None
         self.ss_head = None
+        self.ss_set = set()
 
     def step(self):
         """
@@ -123,10 +125,11 @@ class Environment:
             if not valid_actuator:
                 continue
             future_state_node = self.result(state_node=state_node, action=action, actuator=valid_actuator)
-            if future_state_node:
+            if future_state_node and future_state_node not in self.ss_set:
                 future_state_node.prev_action = action
                 future_state_node.prev_state_node = state_node
                 state_node.future_state_nodes.append(future_state_node)
+                self.ss_set.add(future_state_node)
 
     def _generate_state_space(self, node, depth, depth_limit):
         if depth_limit:
@@ -134,7 +137,7 @@ class Environment:
                 return
         self.gen_future_states(
             state_node=node,
-            actions=self.local_agent.actions(node),
+            actions=self.local_agent.actions(node.state),
             actuators=self.local_agent.actuators
         )
         if not node.future_state_nodes:
@@ -148,7 +151,7 @@ class Environment:
         """
         return
 
-    def generate_state_space(self, agent, depth=None):
+    def generate_state_space(self, agent, depth=None, method=None, args=None):
         """
         num_states = sum_i(sum_j(thing_ij * num_values_thing_ij*)) for j ranging over all things in state i
         :param starter: initial node
@@ -157,16 +160,17 @@ class Environment:
         """
         self.local_agent = agent
         self.ss_head = deepcopy(agent.curr_state_node)
+        if method:
+            self.ss_head = method(agent.curr_state_node, args)
         self._generate_state_space(self.ss_head, depth=0, depth_limit=depth)
-        return copy(self.sshead)
+        return copy(self.ss_head)
 
 
 class GridEnv2D(Environment):
     def __init__(self, col, row, name=None, rules=None):
-        self.name = name
+        super(GridEnv2D, self).__init__(name, rules)
         self.allowed_agents = {'BasicProblemSolver': col + row}
         self.allowed_actions = {'Left', 'Right', 'Up', 'Down'}
-        self.agents = {}
         self.state = State(things=[Grid2D(columns=col, rows=row)])
         self.max_x = col
         self.max_y = row

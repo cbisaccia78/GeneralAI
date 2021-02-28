@@ -70,7 +70,7 @@ class BasicProblemSolver(Agent):
         action_list = []
         for prop in properties:
             if prop == "Location":
-                action_list.extend([Left, Right, Up, Down])
+                action_list.extend([Left(), Right(), Up(), Down()])
         return action_list
 
     def _generate_state_space(self, node, depth, depth_limit):

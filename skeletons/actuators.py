@@ -19,21 +19,21 @@ class Mover(Actuator):
         self.actions.add('Up')
         self.actions.add('Down')
 
-    def act(self, action, state):
-        if action not in self.actions:
-            return None
-        if 'Location' not in vars(state):
-            return None
-        if action == 'Left':
-            state.Location[0] -= action.units
-        elif action == 'Right':
-            state.Location[0] += action.units
-        elif action == 'Up':
-            state.Location[1] -= action.units
-        elif action == 'Down':
-            state.Location[1] += action.units
-        else:
-            return None
+    def act(self, action, state_node):
+        if action.name not in self.actions:
+            return state_node
+        if 'Location' not in vars(state_node.state):
+            return state_node
+        if action.name == 'Left':
+            state_node.state.Location.data[0] -= action.units
+        elif action.name == 'Right':
+            state_node.state.Location.data[0] += action.units
+        elif action.name == 'Up':
+            state_node.state.Location.data[1] -= action.units
+        elif action.name == 'Down':
+            state_node.state.Location.data[1] += action.units
+
+        return state_node
 
 
 class Sucker(Actuator):

@@ -27,6 +27,9 @@ class Left(Action):
     def __repr__(self):
         return str(self)
 
+    def __init__(self, units=1):
+        self.units = units
+
 
 class Right(Action):
     name = 'Right'
@@ -36,6 +39,9 @@ class Right(Action):
 
     def __repr__(self):
         return str(self)
+
+    def __init__(self, units=1):
+        self.units = units
 
 
 class Up(Action):
@@ -47,6 +53,9 @@ class Up(Action):
     def __repr__(self):
         return str(self)
 
+    def __init__(self, units=1):
+        self.units = units
+
 
 class Down(Action):
     name = 'Down'
@@ -56,6 +65,9 @@ class Down(Action):
 
     def __repr__(self):
         return str(self)
+
+    def __init__(self, units=1):
+        self.units = units
 
 
 class Suck(Action):

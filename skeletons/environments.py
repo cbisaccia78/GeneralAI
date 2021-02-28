@@ -144,13 +144,13 @@ class GridEnv2D(Environment):
     * rules:
     """
     def on_board(self, state_node):
-        if state_node is None or state_node.state is None or state_node.state.location is None:
+        if state_node is None or state_node.state is None or state_node.state.Location is None:
             return False
-        loc = state_node.state.location
+        loc = state_node.state.Location.data
         x = loc[0]
         y = loc[1]
-        if 0 < x < self.max_x:
-            if 0 < y < self.max_y:
+        if -1 < x < self.max_x:
+            if -1 < y < self.max_y:
                 return True
         return False
 
@@ -164,13 +164,13 @@ class GridEnv2D(Environment):
 
     def for_util(self, num_rows, num_cols):
         if not self.agents:
-            return (randint(0,num_rows-1), randint(0,num_cols-1))
+            return [randint(0,num_rows-1), randint(0,num_cols-1)]
         for y in range(0,num_rows):
             for x in range(0,num_cols):
                 for key in self.agents:
                     for agent in self.agents[key]:
-                        if (y,x) != agent.curr_state_node.state.location:
-                            return (y,x)
+                        if [y, x] != agent.curr_state_node.state.location:
+                            return [y, x]
         return None
 
     def assign_location(self, agent):
@@ -214,7 +214,7 @@ class GridEnv2D(Environment):
 
     def handle_actuator(self, state_node, action, actuator):
         if action.name in self.allowed_actions:
-            new_state = actuator.act(action=action, state=state_node)
+            new_state = actuator.act(action=action, state_node=state_node)
         else:
             new_state = super(GridEnv2D, self).handle_actuator(state_node, action, actuator)
         return new_state

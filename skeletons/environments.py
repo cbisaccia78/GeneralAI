@@ -1,4 +1,5 @@
 from random import randint
+from copy import deepcopy
 
 from skeletons.spaces import Grid2D
 from skeletons.states import State, StateNode
@@ -122,6 +123,8 @@ class Environment:
                 continue
             future_state_node = self.result(state_node=state_node, action=action, actuator=valid_actuator)
             if future_state_node:
+                future_state_node.prev_action = action
+                future_state_node.prev_state_node = state_node
                 state_node.future_state_nodes.append(future_state_node)
 
 
@@ -213,10 +216,11 @@ class GridEnv2D(Environment):
         self.state.Grid2D.grid = np.random.default_rng().integers(2, size=(dims[0], dims[1]))
 
     def handle_actuator(self, state_node, action, actuator):
+        new_state = deepcopy(state_node)
         if action.name in self.allowed_actions:
-            new_state = actuator.act(action=action, state_node=state_node)
+            new_state = actuator.act(action=action, state_node=new_state)
         else:
-            new_state = super(GridEnv2D, self).handle_actuator(state_node, action, actuator)
+            new_state = super(GridEnv2D, self).handle_actuator(new_state, action, actuator)
         return new_state
         # possibly contain a list of actuators and handlers for each actuator
 

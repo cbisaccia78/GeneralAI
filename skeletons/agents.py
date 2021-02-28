@@ -1,3 +1,4 @@
+from copy import deepcopy
 from skeletons.actions import Left, Right, Up, Down
 from skeletons.problems import Problem
 from skeletons.spaces import Grid2D
@@ -77,7 +78,7 @@ class BasicProblemSolver(Agent):
         if depth_limit:
             if depth == depth_limit:
                 return
-        node.future_state_nodes = self.local_env.gen_future_states(state_node=node, actions=self.actions(self.curr_state_node.state), actuators=self.actuators)
+        self.local_env.gen_future_states(state_node=node, actions=self.actions(self.curr_state_node.state), actuators=self.actuators)
         if not node.future_state_nodes:
             return
         for future_node in node.future_state_nodes:
@@ -108,8 +109,7 @@ class BasicProblemSolver(Agent):
         """
         Once called, agent goes through a loop of sense <-> act <-> goal_test
         """
-        self.generate_state_space(starter=self.ss_head)
-        self.curr_state_node = self.ss_head
+        self.generate_state_space(starter=self.curr_state_node)
         while not self.problem.test(self.curr_state_node.state):
             self.sense()
             self.act()

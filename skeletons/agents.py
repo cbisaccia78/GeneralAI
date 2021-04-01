@@ -15,7 +15,6 @@ class Agent:
         self.actuators = None
         self.environment = environment
         self.curr_state_node = self.get_initial_state()
-        self.local_env = self.get_local_env() if self.curr_state_node else None
         self.ss_head = None
 
     def __repr__(self):

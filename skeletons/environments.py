@@ -29,7 +29,7 @@ class Environment:
 
     def start(self, steps=-1):
         """
-        time = time_unit_0 iren whatever sense time_unit is implemented
+        time = time_unit_0 in whatever sense time_unit is implemented
         :param steps: increments of time, if -1 go till infinity
         :return:
         """
@@ -81,6 +81,9 @@ class Environment:
         return
 
     def assign_initial_local(self, agent):
+        """
+                This function will need to be overridden for every specific environment
+        """
         return
 
     def handle_actuator(self, state_node, action, actuator):
@@ -231,23 +234,13 @@ class GridEnv2D(Environment):
 
     def assign_initial_state(self, agent):
         loc = self.assign_location(agent)
-        loc_state = State(things=[Thing(name="Location", data=loc)])
+        dims = self.state.Grid2D.grid.shape
+        local = Grid2D(col=dims[0], row=dims[1])
+        dirty = self.state.Grid2D.grid[loc[0]][loc[1]]
+        local.grid[loc[0]][loc[1]] = dirty
+        loc_state = State(things=[Thing(name="Location", data=loc), Thing(name="dirty", data=dirty), Thing(name="env_so_far", data=local)])
         self.add_agents(agent)
         return StateNode(prev_state_node=None, prev_action=None, state=loc_state) if loc else None
-
-    def assign_initial_local(self, agent):
-        """
-        shear off all space information except in the location that
-        the agent currently resides and return new env
-        :param agent:
-        :return: subspace of the global environment containing only the agent
-        """
-        dims = self.state.Grid2D.grid.shape
-        agent_loc = agent.curr_state_node.state.Location.data
-        local = GridEnv2D(col=dims[0], row=dims[1])
-        local.state.Grid2D.grid[agent_loc[0]][agent_loc[1]] = self.state.Grid2D.grid[agent_loc[0]][agent_loc[1]]
-        local.agents[repr(agent)] = [agent]
-        return local
 
     def randomize_grid(self):
         dims = self.state.Grid2D.grid.shape

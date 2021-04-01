@@ -18,7 +18,7 @@ class Environment:
         self.space = None
         self.rules = None
         self.ss_head = None
-        self.ss_set = set()
+        self.ss_set = []
 
     def step(self):
         """
@@ -129,7 +129,7 @@ class Environment:
                 future_state_node.prev_action = action
                 future_state_node.prev_state_node = state_node
                 state_node.future_state_nodes.append(future_state_node)
-                self.ss_set.add(future_state_node.state)
+                self.ss_set.append(future_state_node.state)
 
     def _generate_state_space(self, node, depth, depth_limit):
         if depth_limit:
@@ -163,7 +163,7 @@ class Environment:
         if method:
             self.ss_head = method(agent.curr_state_node, args)
         self._generate_state_space(self.ss_head, depth=0, depth_limit=depth)
-        self.ss_set = set()
+        self.ss_set = []
         return copy(self.ss_head)
 
 

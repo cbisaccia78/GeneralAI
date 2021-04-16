@@ -6,13 +6,14 @@ class Thing:
     def __init__(self, name=None, data=None):
         self.name = name if name else repr(data)
         self.data = data
-        return
 
     def __eq__(self, other):
         if isinstance(self.data, (int, bool, list, tuple)):
             return self.data == other.data
         elif isinstance(self.data, np.ndarray):
             return np.array_equal(self.data, other.data)
+        else:
+            return False
 
 
 class Physical(Thing):
@@ -20,41 +21,35 @@ class Physical(Thing):
         super(Physical, self).__init__(name)
         self.shape = shape
         self.size = size
-        return
 
 
 class Virtual(Thing):
     def __init__(self, name=None):
         super(Virtual, self).__init__(name)
-        return
 
 
 class D0Physical(Physical):
     def __init__(self, name=None, shape: Shape = None, size: Size = None):
         super(D0Physical, self).__init__(name, shape, size)
         self.dim = 0
-        return
 
 
 class D1Physical(Physical):
     def __init__(self, name=None, shape: D1Shape = None, size: D1Size = None):
         super(D1Physical, self).__init__(name, shape, size)
         self.dim = 1
-        return
 
 
 class D2Physical(Physical):
     def __init__(self, name=None, shape: D2Shape = None, size: D2Size = None):
         super(D2Physical, self).__init__(name, shape, size)
         self.dim = 2
-        return
 
 
 class D3Physical(Physical):
     def __init__(self, name=None, shape: D3Shape = None, size: D3Size = None):
         super(D3Physical, self).__init__(name, shape, size)
         self.dim = 3
-        return
 
 
 class PhysicalDirective(Physical):

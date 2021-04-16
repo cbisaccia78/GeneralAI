@@ -77,7 +77,6 @@ class BasicProblemSolver(Agent):
         """
         Once called, agent goes through a loop of sense <-> act <-> goal_test
         """
-        self.local_env.generate_state_space(self)
         while not self.problem.test(self.curr_state_node.state):
             self.sense()
             self.act()

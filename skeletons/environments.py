@@ -119,6 +119,7 @@ class Environment:
             :param actuators:
             :return: new_state_node
         """
+        print(str(state_node.state.Location.data) + '    ' + str([state.Location.data for state in self.ss_set]))
         for action in actions:
             valid_actuator = None
             for actuator in actuators:
@@ -129,6 +130,7 @@ class Environment:
                 continue
             future_state_node = self.result(state_node=state_node, action=action, actuator=valid_actuator)
             if future_state_node and not State.is_in(future_state_node.state, self.ss_set):
+                # ('    {}'.format(future_state_node.state.Location.data))
                 future_state_node.prev_action = action
                 future_state_node.prev_state_node = state_node
                 state_node.future_state_nodes.append(future_state_node)
@@ -170,8 +172,10 @@ class Environment:
         return copy(self.ss_head)
 
     def start_agents(self):
-        for agent in self.agents:
-            self.generate_state_space(agent)
+        for agent_name in self.agents:
+            for agent in self.agents[agent_name]:
+                self.generate_state_space(agent)
+                agent.agent_program()  # this needs to be multi threaded
 
 
 class GridEnv2D(Environment):
@@ -242,7 +246,7 @@ class GridEnv2D(Environment):
         local = Grid2D(columns=dims[0], rows=dims[1])
         dirty = self.state.Grid2D.grid[loc[0]][loc[1]]
         local.grid[loc[0]][loc[1]] = dirty
-        loc_state = State(things=[Thing(name="Location", data=loc), Thing(name="dirty", data=dirty), Thing(name="env_so_far", data=local)])
+        loc_state = State(things=[Thing(name="Location", data=loc), Thing(name="dirty", data=dirty)])
         self.add_agents(agent)
         return StateNode(prev_state_node=None, prev_action=None, state=loc_state) if loc else None
 

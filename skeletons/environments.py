@@ -169,6 +169,10 @@ class Environment:
         self.ss_set = []
         return copy(self.ss_head)
 
+    def start_agents(self):
+        for agent in self.agents:
+            self.generate_state_space(agent)
+
 
 class GridEnv2D(Environment):
     def __init__(self, col, row, name=None, rules=None):
@@ -235,7 +239,7 @@ class GridEnv2D(Environment):
     def assign_initial_state(self, agent):
         loc = self.assign_location(agent)
         dims = self.state.Grid2D.grid.shape
-        local = Grid2D(col=dims[0], row=dims[1])
+        local = Grid2D(columns=dims[0], rows=dims[1])
         dirty = self.state.Grid2D.grid[loc[0]][loc[1]]
         local.grid[loc[0]][loc[1]] = dirty
         loc_state = State(things=[Thing(name="Location", data=loc), Thing(name="dirty", data=dirty), Thing(name="env_so_far", data=local)])

@@ -19,7 +19,7 @@ def init_world():
         goal_states=[np.zeros((col, row))],
         actuators=[Mover()],
         step_cost=manhattan) for i in range(0, num_agents)]
-    agents[0].agent_program()
+    world.start_agents()
 
 
 def test_state():

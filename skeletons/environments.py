@@ -2,7 +2,7 @@ from random import randint
 from copy import deepcopy, copy
 
 from skeletons.spaces import Grid2D
-from skeletons.states import State, StateNode
+from skeletons.states import StateNode
 import numpy as np
 
 from skeletons.states import State
@@ -19,6 +19,7 @@ class Environment:
         self.rules = None
         self.ss_head = None
         self.ss_set = []
+        self.time = 0
 
     def step(self):
         """

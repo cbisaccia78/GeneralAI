@@ -4,7 +4,6 @@ from skeletons.problems import Problem
 from skeletons.spaces import Grid2D
 from skeletons.states import StateNode
 from skeletons.percepts import Percepts
-from skeletons.sensors import Sensor, VacuumSensor
 
 
 class Agent:
@@ -22,7 +21,6 @@ class Agent:
 
     def update_local_env(self, percepts):
         self.percept_history.extend(percepts)
-        self.local_env.update_state(percepts)
 
     def get_initial_state(self):
         if self.environment:
@@ -39,10 +37,10 @@ class Agent:
         :return:
         """
         for sensor in self.sensors:
-            self.precepts.add(
+            self.percept_history.add(
                 percept=sensor.sense(),
-                location=self.curr_state_node.state.location,
-                time=self.local_env.time
+                location=self.curr_state_node.state.Location,
+                time=self.environment.time
             )
 
 
@@ -61,7 +59,7 @@ class BasicProblemSolver(Agent):
     ):
         super(BasicProblemSolver, self).__init__(name, environment)
         self.actuators = actuators
-        self.sensors = sensors
+        self.sensors = [sensor(agent=self) for sensor in sensors]
         self.closed_loop = closed_loop  # AKA: self.eyes_open = eyes_open
         self.problem = Problem(initial_state=self.curr_state_node.state, goal_states=goal_states, step_cost=step_cost)
 

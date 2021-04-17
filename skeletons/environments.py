@@ -119,7 +119,9 @@ class Environment:
             :param actuators:
             :return: new_state_node
         """
-        print(str(state_node.state.Location.data) + '    ' + str([state.Location.data for state in self.ss_set]))
+        # ss_set_list = str([state.Location.data for state in self.ss_set])
+
+        # print(str(state_node.state.Location.data) + '    ' + )
         for action in actions:
             valid_actuator = None
             for actuator in actuators:
@@ -130,7 +132,6 @@ class Environment:
                 continue
             future_state_node = self.result(state_node=state_node, action=action, actuator=valid_actuator)
             if future_state_node and not State.is_in(future_state_node.state, self.ss_set):
-                # ('    {}'.format(future_state_node.state.Location.data))
                 future_state_node.prev_action = action
                 future_state_node.prev_state_node = state_node
                 state_node.future_state_nodes.append(future_state_node)
@@ -269,7 +270,7 @@ class VacuumWorld(GridEnv2D):
         super().__init__(col, row, name)
         self.randomize_grid()
         self.allowed_agents["Vacuum"] = col + row
-        self.allowed_actions = {'Suck'}
+        self.allowed_actions = {'Suck', 'Left', 'Right', 'Up', 'Down'}
         self.rules.add(self.one_agent_one_square)
 
     def assign_initial_state(self, agent):

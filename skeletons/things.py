@@ -8,7 +8,7 @@ class Thing:
         self.data = data
 
     def __eq__(self, other):
-        if isinstance(self.data, (int, bool, list, tuple)):
+        if isinstance(self.data, (int, np.int8, np.int16, np.int32, np.int64, bool, list, tuple)):
             return self.data == other.data
         elif isinstance(self.data, np.ndarray):
             return np.array_equal(self.data, other.data)

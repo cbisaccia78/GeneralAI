@@ -1,5 +1,5 @@
 from copy import deepcopy
-from skeletons.actions import Left, Right, Up, Down
+from skeletons.actions import Left, Right, Up, Down, Suck
 from skeletons.problems import Problem
 from skeletons.spaces import Grid2D
 from skeletons.states import StateNode
@@ -71,6 +71,8 @@ class BasicProblemSolver(Agent):
         for prop in properties:
             if prop == "Location":
                 action_list.extend([Left(), Right(), Up(), Down()])
+            if prop == 'dirty':
+                action_list.extend([Suck()])
         return action_list
 
     def agent_program(self):

@@ -121,7 +121,7 @@ class Environment:
         """
         # ss_set_list = str([state.Location.data for state in self.ss_set])
 
-        # print(str(state_node.state.Location.data) + '    ' + )
+        print(str(state_node.state.Location.data) + '    ' + str(len(self.ss_set)))
         for action in actions:
             valid_actuator = None
             for actuator in actuators:

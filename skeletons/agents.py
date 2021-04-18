@@ -32,16 +32,10 @@ class Agent:
 
     def sense(self):
         """
-        try to make agents state hashable by environment properties:
-        ie) location and time indexing:   percepts = {(loc_1, 1) : sense_1, . . . , (loc_n, n) : sense_n}
         :return:
         """
         for sensor in self.sensors:
-            self.percept_history.add(
-                percept=sensor.sense(),
-                location=self.curr_state_node.state.Location,
-                time=self.environment.time
-            )
+            self.percept_history[(self.curr_state_node.state.Location.data, self.environment.time)] = sensor.sense()
 
 
 class BasicProblemSolver(Agent):
@@ -79,6 +73,8 @@ class BasicProblemSolver(Agent):
         """
         while not self.problem.test(self.curr_state_node.state):
             self.sense()
+            for k in self.percept_history:
+                print(self.percept_history[k])
             self.act()
         return True
 

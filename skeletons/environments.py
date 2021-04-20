@@ -171,7 +171,8 @@ class Environment:
             self.ss_head = method(agent.curr_state_node, args)
         self._generate_state_space(self.ss_head, depth=0, depth_limit=depth)
         self.ss_set = []
-        return copy(self.ss_head)
+        agent.curr_state_node = deepcopy(self.ss_head)
+        return agent.curr_state_node
 
     def start_agents(self):
         for agent_name in self.agents:

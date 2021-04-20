@@ -20,7 +20,7 @@ class Agent:
         return self.__class__.__name__
 
     def update_local_env(self, percepts):
-        self.percept_history.extend(percepts)
+        self.percept_history.extend(percepts) # this is wrong
 
     def get_initial_state(self):
         if self.environment:

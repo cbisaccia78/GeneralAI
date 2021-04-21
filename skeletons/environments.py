@@ -249,7 +249,7 @@ class GridEnv2D(Environment):
         local = Grid2D(columns=dims[0], rows=dims[1])
         dirty = self.state.Grid2D.grid[loc[0]][loc[1]]
         local.grid[loc[0]][loc[1]] = dirty
-        loc_state = State(things=[Thing(name="Location", data=loc), Thing(name="dirty", data=dirty)])
+        loc_state = State(things=[Thing(name="Location", data=loc), Thing(name="dirty", data=dirty), Thing(name='env_so_far', data=local.grid)])
         self.add_agents(agent)
         return StateNode(prev_state_node=None, prev_action=None, state=loc_state) if loc else None
 
@@ -288,7 +288,7 @@ class VacuumWorld(GridEnv2D):
     def handle_actuator(self, state_node, action, actuator):
         if action.name in self.allowed_actions:
             new_state = actuator.act(action=action, state=state_node)
-            self.space[new_state.location[0]][new_state.location[1]] = new_state.on_dirt
+            new_state.env_so_far[new_state.location[0]][new_state.location[1]] = new_state.on_dirt
         else:
             new_state = super(VacuumWorld, self).handle_actuator(state_node, action, actuator)
 

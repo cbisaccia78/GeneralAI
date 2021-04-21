@@ -71,7 +71,7 @@ class BasicProblemSolver(Agent):
         """
         Once called, agent goes through a loop of sense <-> act <-> goal_test
         """
-        while not self.problem.test(self.curr_state_node.state):
+        while not self.problem.test(self.curr_state_node.state.env_so_far):
             self.sense()
             for k in self.percept_history:
                 print(self.percept_history[k])

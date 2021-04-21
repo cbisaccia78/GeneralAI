@@ -263,8 +263,12 @@ class GridEnv2D(Environment):
             new_state = actuator.act(action=action, state_node=new_state)
         else:
             new_state = super(GridEnv2D, self).handle_actuator(new_state, action, actuator)
+        self.post_handle(new_state, action)
         return new_state
         # possibly contain a list of actuators and handlers for each actuator
+
+    def post_handle(self, new_state, action):
+        return
 
 
 class VacuumWorld(GridEnv2D):
@@ -275,22 +279,8 @@ class VacuumWorld(GridEnv2D):
         self.allowed_actions = {'Suck', 'Left', 'Right', 'Up', 'Down'}
         self.rules.add(self.one_agent_one_square)
 
-    def assign_initial_state(self, agent):
-        node = super(VacuumWorld, self).assign_initial_state(agent) # agent will have a location
-        agent_loc = node.state.Location
-        """
-        following code assumes that space contains dirt only. need to modify
-        for grid locations which can contain more than one thing.
-        """
-        node.state.on_dirt = self.space[agent_loc[0]][agent_loc[1]]
-        return node
+    def post_handle(self, new_state, action):
+        if action == 'Suck':
 
-    def handle_actuator(self, state_node, action, actuator):
-        if action.name in self.allowed_actions:
-            new_state = actuator.act(action=action, state=state_node)
-            new_state.env_so_far[new_state.location[0]][new_state.location[1]] = new_state.on_dirt
-        else:
-            new_state = super(VacuumWorld, self).handle_actuator(state_node, action, actuator)
 
-        return new_state
 

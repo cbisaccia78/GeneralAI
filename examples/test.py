@@ -1,4 +1,4 @@
-from skeletons.environments import GridEnv2D
+from skeletons.environments import GridEnv2D, VacuumWorld
 from skeletons.agents import BasicProblemSolver
 from skeletons.helpers import manhattan
 from skeletons.actuators import Mover
@@ -12,7 +12,7 @@ num_agents = 1
 
 
 def init_world():
-    world = GridEnv2D(name='Vacuum World', col=col, row=row)
+    world = VacuumWorld(name='Vacuum World', col=col, row=row)
     world.randomize_grid()
     agents = [BasicProblemSolver(
         name=('solver' + str(i)),

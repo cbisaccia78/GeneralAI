@@ -118,7 +118,7 @@ class BasicProblemSolver(Agent):
         coupled with a path cost function, a goal evaluation function, and much much more!
         Can currently only search from the agents current state.
         :param depth: if depth == None then it searches the whole state space
-        :returns: sequence of actions that define a solution
+        :returns: sequence of actions that define a solution.
         """
         return self._search(self.curr_state_node, depth=0, depth_limit=depth)
 

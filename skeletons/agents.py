@@ -35,7 +35,7 @@ class Agent:
         :return:
         """
         for sensor in self.sensors:
-            self.percept_history[(self.curr_state_node.state.Location.data, self.environment.time)] = sensor.sense()
+            self.percept_history[(self.curr_state_node.state.location.data, self.environment.time)] = sensor.sense()
 
 
 class BasicProblemSolver(Agent):

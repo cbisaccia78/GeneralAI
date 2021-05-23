@@ -122,7 +122,7 @@ class Environment:
         """
         # ss_set_list = str([state.Location.data for state in self.ss_set])
 
-        print(str(state_node.state.Location.data) + '    ' + str(len(self.ss_set)))
+        print(str(state_node.state.location.data) + '    ' + str(len(self.ss_set)))
         for action in actions:
             valid_actuator = None
             for actuator in actuators:
@@ -199,9 +199,9 @@ class GridEnv2D(Environment):
     * rules:
     """
     def on_board(self, state_node):
-        if state_node is None or state_node.state is None or state_node.state.Location is None:
+        if state_node is None or state_node.state is None or state_node.state.location is None:
             return False
-        loc = state_node.state.Location.data
+        loc = state_node.state.location.data
         x = loc[0]
         y = loc[1]
         if -1 < x < self.max_x:
@@ -245,16 +245,16 @@ class GridEnv2D(Environment):
 
     def assign_initial_state(self, agent):
         loc = self.assign_location(agent)
-        dims = self.state.Grid2D.grid.shape
+        dims = self.state.Grid2D.data.grid.shape
         local = Grid2D(columns=dims[0], rows=dims[1])
-        dirty = self.state.Grid2D.grid[loc[0]][loc[1]]
+        dirty = self.state.Grid2D.data.grid[loc[0]][loc[1]]
         local.grid[loc[0]][loc[1]] = dirty
-        loc_state = State(things=[Thing(name="Location", data=loc), Thing(name="dirty", data=dirty)])
+        loc_state = State(things=[Thing(name="location", data=loc), Thing(name="dirty", data=dirty)])
         self.add_agents(agent)
         return StateNode(prev_state_node=None, prev_action=None, state=loc_state) if loc else None
 
     def world_state_so_far(self, state_node):
-        s = state_node.state.Location.data
+        s = state_node.state.location.data
         d = state_node.state.dirty.data
         s_x = s[0]
         s_y = s[1]
@@ -262,7 +262,7 @@ class GridEnv2D(Environment):
         local.grid[s_x][s_y] = d
         temp = state_node.prev_state_node
         while temp:
-            s = temp.state.Location.data
+            s = temp.state.location.data
             d = temp.state.dirty.data
             s_x = s[0]
             s_y = s[1]
@@ -270,10 +270,9 @@ class GridEnv2D(Environment):
             temp = temp.prev_state_node
         return State(things=[Thing(name="Grid2D", data=local)])
 
-
     def randomize_grid(self):
-        dims = self.state.Grid2D.grid.shape
-        self.state.Grid2D.grid = np.random.default_rng().integers(2, size=(dims[0], dims[1]))
+        dims = self.state.Grid2D.data.grid.shape
+        self.state.Grid2D.data.grid = np.random.default_rng().integers(2, size=(dims[0], dims[1]))
 
     def handle_actuator(self, state_node, action, actuator):
         new_state = deepcopy(state_node)

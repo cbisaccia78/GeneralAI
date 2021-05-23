@@ -249,7 +249,7 @@ class GridEnv2D(Environment):
         local = Grid2D(columns=dims[0], rows=dims[1])
         dirty = self.state.Grid2D.grid[loc[0]][loc[1]]
         local.grid[loc[0]][loc[1]] = dirty
-        loc_state = State(things=[Thing(name="Location", data=loc), Thing(name="dirty", data=dirty), Thing(name='env_so_far', data=local.grid)])
+        loc_state = State(things=[Thing(name="Location", data=loc), Thing(name="dirty", data=dirty)])
         self.add_agents(agent)
         return StateNode(prev_state_node=None, prev_action=None, state=loc_state) if loc else None
 
@@ -268,7 +268,7 @@ class GridEnv2D(Environment):
             s_y = s[1]
             local.grid[s_x][s_y] = d
             temp = temp.prev_state_node
-
+        return State(things=[Thing(name="Grid2D", data=local)])
 
 
     def randomize_grid(self):

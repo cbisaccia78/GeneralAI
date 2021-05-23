@@ -171,7 +171,8 @@ class Environment:
             self.ss_head = method(agent.curr_state_node, args)
         self._generate_state_space(self.ss_head, depth=0, depth_limit=depth)
         self.ss_set = []
-        return copy(self.ss_head)
+        agent.curr_state_node = deepcopy(self.ss_head)
+        return agent.curr_state_node
 
     def start_agents(self):
         for agent_name in self.agents:
@@ -248,7 +249,7 @@ class GridEnv2D(Environment):
         local = Grid2D(columns=dims[0], rows=dims[1])
         dirty = self.state.Grid2D.grid[loc[0]][loc[1]]
         local.grid[loc[0]][loc[1]] = dirty
-        loc_state = State(things=[Thing(name="Location", data=loc), Thing(name="dirty", data=dirty)])
+        loc_state = State(things=[Thing(name="Location", data=loc), Thing(name="dirty", data=dirty), Thing(name='env_so_far', data=local.grid)])
         self.add_agents(agent)
         return StateNode(prev_state_node=None, prev_action=None, state=loc_state) if loc else None
 
@@ -280,8 +281,12 @@ class GridEnv2D(Environment):
             new_state = actuator.act(action=action, state_node=new_state)
         else:
             new_state = super(GridEnv2D, self).handle_actuator(new_state, action, actuator)
+        self.post_handle(new_state, action)
         return new_state
         # possibly contain a list of actuators and handlers for each actuator
+
+    def post_handle(self, new_state, action):
+        return
 
 
 class VacuumWorld(GridEnv2D):
@@ -292,22 +297,8 @@ class VacuumWorld(GridEnv2D):
         self.allowed_actions = {'Suck', 'Left', 'Right', 'Up', 'Down'}
         self.rules.add(self.one_agent_one_square)
 
-    def assign_initial_state(self, agent):
-        node = super(VacuumWorld, self).assign_initial_state(agent) # agent will have a location
-        agent_loc = node.state.Location
-        """
-        following code assumes that space contains dirt only. need to modify
-        for grid locations which can contain more than one thing.
-        """
-        node.state.on_dirt = self.space[agent_loc[0]][agent_loc[1]]
-        return node
+    def post_handle(self, new_state, action):
+        if action == 'Suck':
 
-    def handle_actuator(self, state_node, action, actuator):
-        if action.name in self.allowed_actions:
-            new_state = actuator.act(action=action, state=state_node)
-            self.space[new_state.location[0]][new_state.location[1]] = new_state.on_dirt
-        else:
-            new_state = super(VacuumWorld, self).handle_actuator(state_node, action, actuator)
 
-        return new_state
 

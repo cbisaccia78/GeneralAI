@@ -97,8 +97,8 @@ class BasicProblemSolver(Agent):
                 )
             )
 
-    def _search(self, node, depth, depth_limit):
-        goal = self.problem.test(self.environment.world_state_so_far(node))
+    def _search(self, node, wssf, depth, depth_limit):
+        goal = self.problem.test(wssf)
         if depth_limit:
             if depth == depth_limit:
                 return node if goal else None
@@ -107,7 +107,7 @@ class BasicProblemSolver(Agent):
         if goal:
             return node
         for fn in node.future_state_nodes:
-            found = self._search(fn, depth=depth+1, depth_limit=depth_limit)
+            found = self._search(fn, wssf, depth=depth+1, depth_limit=depth_limit)
             if found:
                 return found
         return None
@@ -120,7 +120,7 @@ class BasicProblemSolver(Agent):
         :param depth: if depth == None then it searches the whole state space
         :returns: sequence of actions that define a solution.
         """
-        return self._search(self.curr_state_node, depth=0, depth_limit=depth)
+        return self._search(self.curr_state_node, self.environment.world_state_so_far(self.curr_state_node), depth=0, depth_limit=depth)
 
 
 class BasicUtility(Agent):

@@ -252,6 +252,24 @@ class GridEnv2D(Environment):
         self.add_agents(agent)
         return StateNode(prev_state_node=None, prev_action=None, state=loc_state) if loc else None
 
+    def world_state_so_far(self, state_node):
+        s = state_node.state.Location.data
+        d = state_node.state.dirty.data
+        s_x = s[0]
+        s_y = s[1]
+        local = Grid2D(columns=self.max_x, rows=self.max_y)  # filled with 0.5 for unassigned
+        local.grid[s_x][s_y] = d
+        temp = state_node.prev_state_node
+        while temp:
+            s = temp.state.Location.data
+            d = temp.state.dirty.data
+            s_x = s[0]
+            s_y = s[1]
+            local.grid[s_x][s_y] = d
+            temp = temp.prev_state_node
+
+
+
     def randomize_grid(self):
         dims = self.state.Grid2D.grid.shape
         self.state.Grid2D.grid = np.random.default_rng().integers(2, size=(dims[0], dims[1]))

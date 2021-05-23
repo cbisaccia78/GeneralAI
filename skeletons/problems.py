@@ -47,9 +47,12 @@ class Problem:
         return sum(list(map(lambda t: self.step_cost(t[0], t[1]), path)))
 
     def test(self, state):
+        if state:
+            return self._test(state)
+
+    def _test(self, state):
         if State.is_in(state, self.goal_states):
             return True
-        return False
 
 
 

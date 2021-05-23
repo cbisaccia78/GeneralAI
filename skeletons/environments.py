@@ -186,7 +186,7 @@ class GridEnv2D(Environment):
         super(GridEnv2D, self).__init__(name, rules)
         self.allowed_agents = {'BasicProblemSolver': col + row}
         self.allowed_actions = {'Left', 'Right', 'Up', 'Down'}
-        self.state = State(things=[Grid2D(columns=col, rows=row)])
+        self.state = State(things=[Thing(name='Grid2D', data=Grid2D(columns=col, rows=row))])
         self.max_x = col
         self.max_y = row
         self.rules = {self.on_board}
@@ -299,6 +299,7 @@ class VacuumWorld(GridEnv2D):
 
     def post_handle(self, new_state, action):
         if action == 'Suck':
+            return
 
 
 

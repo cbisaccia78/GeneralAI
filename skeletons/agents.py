@@ -98,7 +98,7 @@ class BasicProblemSolver(Agent):
             )
 
     def _search(self, node, depth, depth_limit):
-        goal = self.problem.test(node)
+        goal = self.problem.test(self.environment.world_state_so_far(node))
         if depth_limit:
             if depth == depth_limit:
                 return node if goal else None

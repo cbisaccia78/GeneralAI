@@ -174,6 +174,9 @@ class Environment:
         agent.curr_state_node = deepcopy(self.ss_head)
         return agent.curr_state_node
 
+    def wssf_and_new(self, wssf, new_state):
+        return
+
     def start_agents(self):
         for agent_name in self.agents:
             for agent in self.agents[agent_name]:
@@ -245,11 +248,7 @@ class GridEnv2D(Environment):
 
     def assign_initial_state(self, agent):
         loc = self.assign_location(agent)
-        dims = self.state.Grid2D.data.grid.shape
-        local = Grid2D(columns=dims[0], rows=dims[1])
-        dirty = self.state.Grid2D.data.grid[loc[0]][loc[1]]
-        local.grid[loc[0]][loc[1]] = dirty
-        loc_state = State(things=[Thing(name="location", data=loc), Thing(name="dirty", data=dirty)])
+        loc_state = State(things=[Thing(name="location", data=loc)])
         self.add_agents(agent)
         return StateNode(prev_state_node=None, prev_action=None, state=loc_state) if loc else None
 
@@ -269,6 +268,10 @@ class GridEnv2D(Environment):
             local.grid[s_x][s_y] = d
             temp = temp.prev_state_node
         return State(things=[Thing(name="Grid2D", data=local)])
+
+    def wssf_and_new(self, wssf, new_state):
+        s = new_state.state.location.data
+        d = new_state.location
 
     def randomize_grid(self):
         dims = self.state.Grid2D.data.grid.shape

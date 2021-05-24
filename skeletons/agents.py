@@ -4,7 +4,7 @@ from skeletons.problems import Problem
 from skeletons.spaces import Grid2D
 from skeletons.states import StateNode
 from skeletons.percepts import Percepts
-
+from functools import cache
 
 class Agent:
     def __init__(self, name=None, environment=None):
@@ -107,7 +107,7 @@ class BasicProblemSolver(Agent):
         if goal:
             return node
         for fn in node.future_state_nodes:
-            found = self._search(fn, wssf, depth=depth+1, depth_limit=depth_limit)
+            found = self._search(fn, self.environment.wssf_and_new(wssf, fn.state), depth=depth+1, depth_limit=depth_limit)
             if found:
                 return found
         return None

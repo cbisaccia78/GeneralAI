@@ -73,12 +73,23 @@ class BasicProblemSolver(Agent):
         """
         Once called, agent goes through a loop of sense <-> act <-> goal_test
         """
-        while not self.problem.test(self.environment.world_state_so_far(self.curr_state_node)):
-            self.sense()
-            for k in self.percept_history:
-                print(self.percept_history[k])
-            self.act()
-        return True
+        if self.closed_loop:
+            # need to research after each sense
+            while not self.problem.test(self.curr_state_node):
+                self.sense()
+                for k in self.percept_history:
+                    print(self.percept_history[k])
+                self.act()
+            return True
+        else:
+            # eyes closed
+            solution = self.search()
+            for node in solution:
+                """
+                done in a for loop to simulate time, instead of just doing curr_state_node = solution[-1]
+                need to find a way to incorporate time into state transitions
+                """
+                self.curr_state_node = node
 
     def act(self):
         """
@@ -88,23 +99,16 @@ class BasicProblemSolver(Agent):
         :param percepts:
         :return:
         """
-        action = self.search()
-        if action:
-            self.curr_state_node = StateNode(
-                parent=self.curr_state_node,
-                prev_action=action,
-                state=self.actuators[action.actuator_name].act(
-                    action,
-                    self.curr_state_node.state
-                )
-            )
+        solution = self.search()
+        if solution:
+            self.curr_state_node = solution[0]
 
-    def best_first_search(self, initial_node, depth_limit):
+    def best_first_search(self, initial_node, depth_limit, f):
         goal = self.problem.test(initial_node.state)
         if depth_limit == 0:
             return goal
         future_nodes = self.environment.gen_future_nodes(initial_node, self.actions(initial_node), self.actuators)
-        self.frontier.extend(future_nodes)
+        self.frontier.extend(sorted(future_nodes, f))
         self.reached = {initial_node.state: initial_node}
         while len(self.frontier) > 0:
             node = self.frontier.pop()
@@ -114,7 +118,7 @@ class BasicProblemSolver(Agent):
                 s = child.state
                 if s not in self.reached or child.path_cost < self.reached[s].path_cost:
                     self.reached[s] = child
-                    self.frontier.append(child)
+                    self.frontier.append(child) # ToDo need to make sure this child is placed in correct order
         return None
 
     def expand(self, node):
@@ -123,7 +127,6 @@ class BasicProblemSolver(Agent):
         for fn in fns:
             fn.path_cost = node.path_cost + self.problem.step_cost(node.state, fn.prev_action, fn.state)
         return fns
-
 
     def search(self, depth=None, search_type="best_first"):
         """

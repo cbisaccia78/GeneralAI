@@ -2,7 +2,7 @@ from skeletons.actions import Left, Right, Up, Down, Suck
 from skeletons.problems import Problem
 from skeletons.percepts import Percepts
 from skeletons.helpers import basic_eval
-from functools import cache
+from functools import lru_cache
 
 
 class Agent:

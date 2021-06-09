@@ -16,6 +16,7 @@ def init_world():
         name=('solver' + str(i)),
         environment=world,
         goal_states=[np.zeros((col, row))],
+        closed_loop=False,
         actuators=[Mover()],
         sensors=[VacuumSensor],
         step_cost=manhattan) for i in range(0, num_agents)]

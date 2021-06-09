@@ -208,7 +208,7 @@ class GridEnv2D(Environment):
 
     def assign_initial_state(self, agent):
         loc = self.assign_location(agent)
-        loc_state = State(location=loc)
+        loc_state = State(location=loc, grid2d=Grid2D(self.max_x, self.max_y))
         self.add_agents(agent)
         return StateNode(parent=None, prev_action=None, state=loc_state) if loc else None
 
@@ -230,8 +230,8 @@ class GridEnv2D(Environment):
         return State(grid2d=local)
 
     def randomize_grid(self):
-        dims = self.state.Grid2D.grid.shape
-        self.state.Grid2D.grid = np.random.default_rng().integers(2, size=(dims[0], dims[1]))
+        dims = self.state.grid2d.grid.shape
+        self.state.grid2d.grid = np.random.default_rng().integers(2, size=(dims[0], dims[1]))
 
     def handle_actuator(self, state_node, action, actuator):
         new_state = deepcopy(state_node)

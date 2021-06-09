@@ -1,10 +1,9 @@
-from copy import deepcopy
 from skeletons.actions import Left, Right, Up, Down, Suck
 from skeletons.problems import Problem
-from skeletons.spaces import Grid2D
-from skeletons.states import StateNode
 from skeletons.percepts import Percepts
+from skeletons.helpers import basic_eval
 from functools import cache
+
 
 class Agent:
     def __init__(self, name=None, environment=None):
@@ -103,7 +102,7 @@ class BasicProblemSolver(Agent):
         if solution:
             self.curr_state_node = solution[0]
 
-    def best_first_search(self, initial_node, depth_limit, f):
+    def best_first_search(self, initial_node, depth_limit, f=basic_eval):
         goal = self.problem.test(initial_node.state)
         if depth_limit == 0:
             return goal
@@ -118,7 +117,7 @@ class BasicProblemSolver(Agent):
                 s = child.state
                 if s not in self.reached or child.path_cost < self.reached[s].path_cost:
                     self.reached[s] = child
-                    self.frontier.append(child) # ToDo need to make sure this child is placed in correct order
+                    self.frontier.append(child)  # ToDo need to make sure this child is placed in correct order
         return None
 
     def expand(self, node):
@@ -140,7 +139,7 @@ class BasicProblemSolver(Agent):
         goal = self.problem.test(self.curr_state_node)
         if goal:
             return self.curr_state_node
-        return self.best_first_search(self.curr_state_node, depth_limit=depth)
+        return self.best_first_search(self.curr_state_node, depth_limit=depth, f=lambda x: x*2)
 
 
 class BasicUtility(Agent):

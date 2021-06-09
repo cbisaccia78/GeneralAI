@@ -6,10 +6,10 @@ class State:
     it will include info relevant to driving, but it wont include the current stock price of google.
     In this way the state is a subset or subclass of the current environment.
     """
-    def __init__(self, name=None, things=None):
+    def __init__(self, name=None, **kwargs):
         self.name = name
-        for thing in things:
-            setattr(self, thing.name if hasattr(thing, 'name') else repr(thing), thing)
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
     def __eq__(self, other):
         if not (State.sub_state(self, other) and State.sub_state(other, self)):
@@ -27,8 +27,6 @@ class State:
 
     @staticmethod
     def sub_state(state1, state2):
-        # if state1.Location == state2.Location:
-            #print('debug')
         for attribute in state1.__dict__:
             if not (hasattr(state2, attribute) and getattr(state1, attribute) == getattr(state2, attribute)):
                 return False

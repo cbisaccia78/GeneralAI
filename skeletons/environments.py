@@ -6,7 +6,6 @@ from skeletons.states import StateNode
 import numpy as np
 
 from skeletons.states import State
-from skeletons.things import Thing
 
 
 class Environment:
@@ -189,7 +188,7 @@ class GridEnv2D(Environment):
         super(GridEnv2D, self).__init__(name, rules)
         self.allowed_agents = {'BasicProblemSolver': col + row}
         self.allowed_actions = {'Left', 'Right', 'Up', 'Down'}
-        self.state = State(things=[Thing(name='Grid2D', data=Grid2D(columns=col, rows=row))])
+        self.state = State(grid2d=Grid2D(columns=col, rows=row))
         self.max_x = col
         self.max_y = row
         self.rules = {self.on_board}
@@ -248,7 +247,7 @@ class GridEnv2D(Environment):
 
     def assign_initial_state(self, agent):
         loc = self.assign_location(agent)
-        loc_state = State(things=[Thing(name="location", data=loc)])
+        loc_state = State(location=loc)
         self.add_agents(agent)
         return StateNode(prev_state_node=None, prev_action=None, state=loc_state) if loc else None
 
@@ -267,7 +266,7 @@ class GridEnv2D(Environment):
             s_y = s[1]
             local.grid[s_x][s_y] = d
             temp = temp.prev_state_node
-        return State(things=[Thing(name="Grid2D", data=local)])
+        return State(grid2d=local)
 
     def wssf_and_new(self, wssf, new_state):
         s = new_state.state.location.data

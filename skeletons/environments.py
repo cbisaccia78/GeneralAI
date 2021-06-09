@@ -111,7 +111,7 @@ class Environment:
             return new_state_node
         return None
 
-    def gen_future_states(self, state_node, actions, actuators):
+    def gen_future_nodes(self, state_node, actions, actuators):
         """
             specifies transition model.
             :param state_node:
@@ -164,7 +164,7 @@ class GridEnv2D(Environment):
     def on_board(self, state_node):
         if state_node is None or state_node.state is None or state_node.state.location is None:
             return False
-        loc = state_node.state.location.data
+        loc = state_node.state.location
         x = loc[0]
         y = loc[1]
         if -1 < x < self.max_x:
@@ -213,26 +213,25 @@ class GridEnv2D(Environment):
         return StateNode(parent=None, prev_action=None, state=loc_state) if loc else None
 
     def world_state_so_far(self, state_node):
-        s = state_node.state.location.data
-        d = state_node.state.dirty.data
+        s = state_node.state.location
+        d = state_node.state.dirty
         s_x = s[0]
         s_y = s[1]
         local = Grid2D(columns=self.max_x, rows=self.max_y)  # filled with 0.5 for unassigned
         local.grid[s_x][s_y] = d
         temp = state_node.parent
         while temp:
-            s = temp.state.location.data
-            d = temp.state.dirty.data
+            s = temp.state.location
+            d = temp.state.dirty
             s_x = s[0]
             s_y = s[1]
             local.grid[s_x][s_y] = d
             temp = temp.parent
         return State(grid2d=local)
 
-
     def randomize_grid(self):
-        dims = self.state.Grid2D.data.grid.shape
-        self.state.Grid2D.data.grid = np.random.default_rng().integers(2, size=(dims[0], dims[1]))
+        dims = self.state.Grid2D.grid.shape
+        self.state.Grid2D.grid = np.random.default_rng().integers(2, size=(dims[0], dims[1]))
 
     def handle_actuator(self, state_node, action, actuator):
         new_state = deepcopy(state_node)

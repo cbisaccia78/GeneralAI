@@ -35,7 +35,7 @@ class Agent:
         :return:
         """
         for sensor in self.sensors:
-            self.percept_history[(self.curr_state_node.state.location.data, self.environment.time)] = sensor.sense()
+            self.percept_history[(self.curr_state_node.state.location, self.environment.time)] = sensor.sense()
 
 
 class BasicProblemSolver(Agent):
@@ -56,12 +56,14 @@ class BasicProblemSolver(Agent):
         self.sensors = [sensor(agent=self) for sensor in sensors]
         self.closed_loop = closed_loop  # AKA: self.eyes_open = eyes_open
         self.problem = Problem(initial_state=self.curr_state_node.state, goal_states=goal_states, step_cost=step_cost)
+        self.frontier = []
+        self.reached = {}
 
     def actions(self, state):
         properties = [prop for prop in vars(state) if not prop.startswith(("__"))]
         action_list = []
         for prop in properties:
-            if prop == "Location":
+            if prop == "location":
                 action_list.extend([Left(), Right(), Up(), Down()])
             if prop == 'dirty':
                 action_list.extend([Suck()])
@@ -97,37 +99,45 @@ class BasicProblemSolver(Agent):
                 )
             )
 
-    def _search(self, node, depth, depth_limit):
-        goal = self.problem.test(node)
-        if depth_limit:
-            if depth == depth_limit:
-                return node if goal else None
-        if not node.future_state_nodes:
-            return node if goal else None
-        if goal:
-            return node
-        for fn in node.future_state_nodes:
-            found = self._search(fn, depth=depth+1, depth_limit=depth_limit)
-            if found:
-                return found
+    def best_first_search(self, initial_node, depth_limit):
+        goal = self.problem.test(initial_node.state)
+        if depth_limit == 0:
+            return goal
+        future_nodes = self.environment.gen_future_nodes(initial_node, self.actions(initial_node), self.actuators)
+        self.frontier.extend(future_nodes)
+        self.reached = {initial_node.state: initial_node}
+        while len(self.frontier) > 0:
+            node = self.frontier.pop()
+            if self.problem.test(node.state):
+                return node
+            for child in self.expand(node):
+                s = child.state
+                if s not in self.reached or child.path_cost < self.reached[s].path_cost:
+                    self.reached[s] = child
+                    self.frontier.append(child)
         return None
 
-    def search(self, depth=None):
+    def expand(self, node):
+        s = node.state
+        fns = self.environment.gen_future_nodes(node, self.actions(s), self.actuators)
+        for fn in fns:
+            fn.path_cost = node.path_cost + self.problem.step_cost(node.state, fn.prev_action, fn.state)
+        return fns
+
+
+    def search(self, depth=None, search_type="best_first"):
         """
         makes use of self.problem: provides filtering of environment into a relevant set of features (state space),
         coupled with a path cost function, a goal evaluation function, and much much more!
         Can currently only search from the agents current state.
         :param depth: if depth == None then it searches the whole state space
+        :param search_type: defaults to best first search
         :returns: sequence of actions that define a solution.
         """
         goal = self.problem.test(self.curr_state_node)
         if goal:
             return self.curr_state_node
-        return self._search(self.curr_state_node, depth=0, depth_limit=depth)
-
-    def graph_search(self, depth=None):
-        frontier = [self.curr_state_node] # priority queue
-        explored = [] # hash table
+        return self.best_first_search(self.curr_state_node, depth_limit=depth)
 
 
 class BasicUtility(Agent):

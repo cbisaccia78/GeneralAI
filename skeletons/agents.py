@@ -121,11 +121,7 @@ class BasicProblemSolver(Agent):
         return None
 
     def expand(self, node):
-        s = node.state
-        fns = self.environment.gen_future_nodes(node, self.actions(s), self.actuators)
-        for fn in fns:
-            fn.path_cost = node.path_cost + self.problem.step_cost(node.state, fn.prev_action, fn.state)
-        return fns
+        return self.environment.gen_future_nodes(node, self.actions(node.state), self.actuators, self.problem.step_cost)
 
     def search(self, depth=None, search_type="best_first"):
         """

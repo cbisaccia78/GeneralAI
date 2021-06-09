@@ -111,7 +111,7 @@ class Environment:
             return new_state_node
         return None
 
-    def gen_future_nodes(self, state_node, actions, actuators):
+    def gen_future_nodes(self, state_node, actions, actuators, step_cost):
         """
             specifies transition model.
             :param state_node:
@@ -130,11 +130,12 @@ class Environment:
                     break
             if not valid_actuator:
                 continue
-            future_state_node = self.result(state_node=state_node, action=action, actuator=valid_actuator)
-            if future_state_node and not State.is_in(future_state_node.state, self.ss_set):
-                future_state_node.prev_action = action
-                future_state_node.parent = state_node
-                future_nodes.append(future_state_node)
+            fn = self.result(state_node=state_node, action=action, actuator=valid_actuator)
+            if fn and not State.is_in(fn.state, self.ss_set):
+                fn.prev_action = action
+                fn.parent = state_node
+                fn.path_cost = state_node.path_cost + step_cost(state_node.state, fn.prev_action, fn.state)
+                future_nodes.append(fn)
 
         return future_nodes
 

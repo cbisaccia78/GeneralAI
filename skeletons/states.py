@@ -16,6 +16,12 @@ class State:
             return False
         return True
 
+    def __hash__(self):
+        return hash(self.__key())
+
+    def __key(self):
+        return tuple(getattr(self, attr) for attr in self.__dict__)
+
     def generate_space(self):
         return
 

@@ -122,6 +122,10 @@ class BasicProblemSolver(Agent):
         """
         return self._search(self.curr_state_node, self.environment.world_state_so_far(self.curr_state_node), depth=0, depth_limit=depth)
 
+    def graph_search(self, depth=None):
+        frontier = [self.curr_state_node] # priority queue
+        explored = [] # hash table
+
 
 class BasicUtility(Agent):
     pass

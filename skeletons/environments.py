@@ -121,7 +121,7 @@ class Environment:
         """
         # ss_set_list = str([state.Location.data for state in self.ss_set])
 
-        print(str(state_node.state.location.data) + '    ' + str(len(self.ss_set)))
+        future_nodes = [] # priority queue
         for action in actions:
             valid_actuator = None
             for actuator in actuators:
@@ -133,53 +133,14 @@ class Environment:
             future_state_node = self.result(state_node=state_node, action=action, actuator=valid_actuator)
             if future_state_node and not State.is_in(future_state_node.state, self.ss_set):
                 future_state_node.prev_action = action
-                future_state_node.prev_state_node = state_node
-                state_node.future_state_nodes.append(future_state_node)
-                self.ss_set.append(future_state_node.state)
+                future_state_node.parent = state_node
+                future_nodes.append(future_state_node)
 
-    def _generate_state_space(self, node, depth, depth_limit):
-        if depth_limit:
-            if depth == depth_limit:
-                return
-        self.gen_future_states(
-            state_node=node,
-            actions=self.local_agent.actions(node.state),
-            actuators=self.local_agent.actuators
-        )
-        if not node.future_state_nodes:
-            return
-        for future_node in node.future_state_nodes:
-            self._generate_state_space(future_node, depth=depth+1, depth_limit=depth_limit)
-        """
-        :param head:
-        :param depth:
-        :return:
-        """
-        return
-
-    def generate_state_space(self, agent, depth=None, method=None, args=None):
-        """
-        num_states = sum_i(sum_j(thing_ij * num_values_thing_ij*)) for j ranging over all things in state i
-        :param starter: initial node
-        :param depth: specifies how deep the state space tree will go. None for exhaustion
-        :return:
-        """
-        self.local_agent = agent
-        self.ss_head = deepcopy(agent.curr_state_node)
-        if method:
-            self.ss_head = method(agent.curr_state_node, args)
-        self._generate_state_space(self.ss_head, depth=0, depth_limit=depth)
-        self.ss_set = []
-        agent.curr_state_node = deepcopy(self.ss_head)
-        return agent.curr_state_node
-
-    def wssf_and_new(self, wssf, new_state):
-        return
+        return future_nodes
 
     def start_agents(self):
         for agent_name in self.agents:
             for agent in self.agents[agent_name]:
-                self.generate_state_space(agent)
                 agent.agent_program()  # this needs to be multi threaded
 
 
@@ -249,7 +210,7 @@ class GridEnv2D(Environment):
         loc = self.assign_location(agent)
         loc_state = State(location=loc)
         self.add_agents(agent)
-        return StateNode(prev_state_node=None, prev_action=None, state=loc_state) if loc else None
+        return StateNode(parent=None, prev_action=None, state=loc_state) if loc else None
 
     def world_state_so_far(self, state_node):
         s = state_node.state.location.data
@@ -258,19 +219,16 @@ class GridEnv2D(Environment):
         s_y = s[1]
         local = Grid2D(columns=self.max_x, rows=self.max_y)  # filled with 0.5 for unassigned
         local.grid[s_x][s_y] = d
-        temp = state_node.prev_state_node
+        temp = state_node.parent
         while temp:
             s = temp.state.location.data
             d = temp.state.dirty.data
             s_x = s[0]
             s_y = s[1]
             local.grid[s_x][s_y] = d
-            temp = temp.prev_state_node
+            temp = temp.parent
         return State(grid2d=local)
 
-    def wssf_and_new(self, wssf, new_state):
-        s = new_state.state.location.data
-        d = new_state.location
 
     def randomize_grid(self):
         dims = self.state.Grid2D.data.grid.shape

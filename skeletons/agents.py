@@ -89,7 +89,7 @@ class BasicProblemSolver(Agent):
         action = self.search()
         if action:
             self.curr_state_node = StateNode(
-                prev_state_node=self.curr_state_node,
+                parent=self.curr_state_node,
                 prev_action=action,
                 state=self.actuators[action.actuator_name].act(
                     action,
@@ -97,8 +97,8 @@ class BasicProblemSolver(Agent):
                 )
             )
 
-    def _search(self, node, wssf, depth, depth_limit):
-        goal = self.problem.test(wssf)
+    def _search(self, node, depth, depth_limit):
+        goal = self.problem.test(node)
         if depth_limit:
             if depth == depth_limit:
                 return node if goal else None
@@ -107,7 +107,7 @@ class BasicProblemSolver(Agent):
         if goal:
             return node
         for fn in node.future_state_nodes:
-            found = self._search(fn, self.environment.wssf_and_new(wssf, fn.state), depth=depth+1, depth_limit=depth_limit)
+            found = self._search(fn, depth=depth+1, depth_limit=depth_limit)
             if found:
                 return found
         return None
@@ -120,7 +120,10 @@ class BasicProblemSolver(Agent):
         :param depth: if depth == None then it searches the whole state space
         :returns: sequence of actions that define a solution.
         """
-        return self._search(self.curr_state_node, self.environment.world_state_so_far(self.curr_state_node), depth=0, depth_limit=depth)
+        goal = self.problem.test(self.curr_state_node)
+        if goal:
+            return self.curr_state_node
+        return self._search(self.curr_state_node, depth=0, depth_limit=depth)
 
     def graph_search(self, depth=None):
         frontier = [self.curr_state_node] # priority queue

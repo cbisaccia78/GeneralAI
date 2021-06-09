@@ -41,11 +41,11 @@ class State:
 
 
 class StateNode:
-    def __init__(self, prev_state_node, prev_action, state):
-        self.prev_state_node = prev_state_node
+    def __init__(self, parent, prev_action, state, path_cost):
+        self.parent = parent
         self.prev_action = prev_action
         self.state = state
-        self.future_state_nodes = []
+        self.path_cost = path_cost
 
 
 

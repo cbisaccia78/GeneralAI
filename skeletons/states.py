@@ -17,7 +17,7 @@ class State:
         return hash(self.__key())
 
     def __key(self):
-        return tuple(getattr(self, attr) for attr in self.__dict__)
+        return (getattr(self, attr) for attr in self.__dict__)
 
     @staticmethod
     def sub_state(state1, state2):
@@ -27,10 +27,15 @@ class State:
         return True
 
     @staticmethod
-    def is_in(state1, states):
-        for state in states:
-            if state1.__eq__(state):
-                return True
+    def is_in(state1, states, reverse=False):
+        if reverse:
+            for state in states:
+                if State.sub_state(state, state1):
+                    return True
+        else:
+            for state in states:
+                if State.sub_state(state1, state):
+                    return True
         return False
 
 

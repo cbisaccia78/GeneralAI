@@ -22,16 +22,16 @@ class Mover(Actuator):
     def act(self, action, state_node):
         if action.name not in self.actions:
             return state_node
-        if 'Location' not in vars(state_node.state):
+        if 'location' not in vars(state_node.state):
             return state_node
         if action.name == 'Left':
-            state_node.state.Location.data[0] -= action.units
+            state_node.state.location[0] -= action.units
         elif action.name == 'Right':
-            state_node.state.Location.data[0] += action.units
+            state_node.state.location[0] += action.units
         elif action.name == 'Up':
-            state_node.state.Location.data[1] -= action.units
+            state_node.state.location[1] -= action.units
         elif action.name == 'Down':
-            state_node.state.Location.data[1] += action.units
+            state_node.state.location[1] += action.units
 
         return state_node
 

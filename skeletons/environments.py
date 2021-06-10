@@ -131,7 +131,7 @@ class Environment:
             if not valid_actuator:
                 continue
             fn = self.result(state_node=state_node, action=action, actuator=valid_actuator)
-            if fn and not State.is_in(fn.state, self.ss_set):
+            if fn:
                 fn.prev_action = action
                 fn.parent = state_node
                 fn.path_cost = state_node.path_cost + step_cost(state_node.state, fn.prev_action, fn.state)

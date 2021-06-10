@@ -54,6 +54,7 @@ class BasicProblemSolver(Agent):
         self.actuators = actuators
         self.sensors = [sensor(agent=self) for sensor in sensors]
         self.closed_loop = closed_loop  # AKA: self.eyes_open = eyes_open
+        self.step_cost=step_cost
         self.problem = Problem(initial_state=self.curr_state_node.state, goal_states=goal_states, step_cost=step_cost)
         self.frontier = []
         self.reached = {}
@@ -83,12 +84,13 @@ class BasicProblemSolver(Agent):
         else:
             # eyes closed
             solution = self.search()
-            for node in solution:
-                """
-                done in a for loop to simulate time, instead of just doing curr_state_node = solution[-1]
-                need to find a way to incorporate time into state transitions
-                """
-                self.curr_state_node = node
+            if solution:
+                for node in solution:
+                    """
+                    done in a for loop to simulate time, instead of just doing curr_state_node = solution[-1]
+                    need to find a way to incorporate time into state transitions
+                    """
+                    self.curr_state_node = node
 
     def act(self):
         """
@@ -106,8 +108,8 @@ class BasicProblemSolver(Agent):
         goal = self.problem.test(initial_node.state)
         if depth_limit == 0:
             return goal
-        future_nodes = self.environment.gen_future_nodes(initial_node, self.actions(initial_node), self.actuators)
-        self.frontier.extend(sorted(future_nodes, f))
+        future_nodes = self.environment.gen_future_nodes(initial_node, self.actions(initial_node.state), self.actuators, self.step_cost)
+        self.frontier.extend(sorted(future_nodes, key=f))
         self.reached = {initial_node.state: initial_node}
         while len(self.frontier) > 0:
             node = self.frontier.pop()
@@ -135,7 +137,7 @@ class BasicProblemSolver(Agent):
         goal = self.problem.test(self.curr_state_node)
         if goal:
             return self.curr_state_node
-        return self.best_first_search(self.curr_state_node, depth_limit=depth, f=lambda x: x*2)
+        return self.best_first_search(self.curr_state_node, depth_limit=depth, f=lambda x: 1)
 
 
 class BasicUtility(Agent):

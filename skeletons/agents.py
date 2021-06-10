@@ -111,15 +111,20 @@ class BasicProblemSolver(Agent):
         future_nodes = self.environment.gen_future_nodes(initial_node, self.actions(initial_node.state), self.actuators, self.step_cost)
         self.frontier.extend(sorted(future_nodes, key=f))
         self.reached = {initial_node.state: initial_node}
+        count = 0
         while len(self.frontier) > 0:
+            if count % 100 == 0:
+                print(count)
             node = self.frontier.pop()
             if self.problem.test(node.state):
+                print(node)
                 return node
             for child in self.expand(node):
                 s = child.state
                 if s not in self.reached or child.path_cost < self.reached[s].path_cost:
                     self.reached[s] = child
                     self.frontier.append(child)  # ToDo need to make sure this child is placed in correct order
+            count += 1
         return None
 
     def expand(self, node):

@@ -117,6 +117,7 @@ class Environment:
             :param state_node:
             :param actions:
             :param actuators:
+            :param step_cost:
             :return: new_state_node
         """
         # ss_set_list = str([state.Location.data for state in self.ss_set])
@@ -255,6 +256,15 @@ class VacuumWorld(GridEnv2D):
         self.allowed_agents["Vacuum"] = col + row
         self.allowed_actions = {'Suck', 'Left', 'Right', 'Up', 'Down'}
         self.rules.add(self.one_agent_one_square)
+
+    def assign_initial_state(self, agent):
+        loc = self.assign_location(agent)
+        gr = Grid2D(self.max_x, self.max_y)
+        has_dirt = self.state.grid2d.grid[loc[0]][loc[1]]
+        gr.grid[loc[0]][loc[1]] = has_dirt
+        loc_state = State(location=loc, grid2d=gr, dirty=has_dirt)
+        self.add_agents(agent)
+        return StateNode(parent=None, prev_action=None, state=loc_state) if loc else None
 
     def post_handle(self, new_state, action):
         if action == 'Suck':

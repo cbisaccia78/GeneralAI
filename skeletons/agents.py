@@ -65,7 +65,7 @@ class BasicProblemSolver(Agent):
         for prop in properties:
             if prop == "location":
                 action_list.extend([Left(), Right(), Up(), Down()])
-            if prop == 'dirty':
+            if prop == 'vacuum':
                 action_list.extend([Suck()])
         return action_list
 

@@ -42,7 +42,7 @@ class Sucker(Actuator):
         self.actions.add('Suck')
 
     def act(self, action, state):
-        if state.on_dirt:
+        if state.grid2d.grid[0][]:
             state.on_dirt = 0
             return state
         return state

@@ -262,7 +262,7 @@ class VacuumWorld(GridEnv2D):
         gr = Grid2D(self.max_x, self.max_y)
         has_dirt = self.state.grid2d.grid[loc[0]][loc[1]]
         gr.grid[loc[0]][loc[1]] = has_dirt
-        loc_state = State(location=loc, grid2d=gr, dirty=has_dirt)
+        loc_state = State(location=loc, grid2d=gr, vacuum=True)
         self.add_agents(agent)
         return StateNode(parent=None, prev_action=None, state=loc_state) if loc else None
 

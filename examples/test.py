@@ -1,7 +1,7 @@
 from skeletons.environments import VacuumWorld
 from skeletons.agents import BasicProblemSolver
 from skeletons.helpers import manhattan
-from skeletons.actuators import Mover
+from skeletons.actuators import Mover, Sucker
 from skeletons.sensors import VacuumSensor
 from skeletons.spaces import Grid2D
 from skeletons.states import State
@@ -20,7 +20,7 @@ def init_world():
         environment=world,
         goal_states=[State(grid2d=Grid2D(col, row, initial=np.zeros((col, row))))],
         closed_loop=False,
-        actuators=[Mover()],
+        actuators=[Mover(), Sucker()],
         sensors=[VacuumSensor],
         step_cost=manhattan) for i in range(0, num_agents)]
     world.start_agents()

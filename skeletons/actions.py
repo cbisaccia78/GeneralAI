@@ -78,3 +78,6 @@ class Suck(Action):
 
     def __repr__(self):
         return str(self)
+
+    def __init__(self):
+        pass

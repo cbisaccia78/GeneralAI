@@ -41,11 +41,13 @@ class Sucker(Actuator):
         super(Sucker, self).__init__()
         self.actions.add('Suck')
 
-    def act(self, action, state):
-        if state.grid2d.grid[0][]:
-            state.on_dirt = 0
-            return state
-        return state
+    def act(self, action, state_node):
+        if action.name not in self.actions:
+            return state_node
+        loc = state_node.state.location
+        if state_node.state.grid2d.grid[loc[0]][loc[1]] == 1:
+            state_node.state.grid2d.grid[loc[0]][loc[1]] = 0
+        return state_node
 
 
 

@@ -124,7 +124,7 @@ class BasicProblemSolver(Agent):
                 if s not in self.reached or child.path_cost < self.reached[s].path_cost:
                     self.reached[s] = child
                     self.frontier.append(child)  # ToDo need to make sure this child is placed in correct order
-            count += 1
+                count += 1
         return None
 
     def expand(self, node):

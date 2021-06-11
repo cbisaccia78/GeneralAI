@@ -1,3 +1,4 @@
+from types import FunctionType
 
 class State:
     """
@@ -44,7 +45,7 @@ class StateNode:
         self.parent = parent
         self.prev_action = prev_action
         self.state = state
-        self.path_cost = path_cost(parent.state, prev_action, state) if path_cost else 0
+        self.path_cost = (path_cost(parent.state, prev_action, state) if isinstance(path_cost, FunctionType) else path_cost) if path_cost else 0
 
 
 

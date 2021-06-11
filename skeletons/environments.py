@@ -108,7 +108,7 @@ class Environment:
     def result(self, state_node, action, actuator):
         new_state_node = self.handle_actuator(state_node=state_node, action=action, actuator=actuator)
         if self.valid(new_state_node):
-            return new_state_node
+            return self.post_handle(new_state_node, action)
         return None
 
     def gen_future_nodes(self, state_node, actions, actuators, step_cost):
@@ -144,6 +144,9 @@ class Environment:
         for agent_name in self.agents:
             for agent in self.agents[agent_name]:
                 agent.agent_program()  # this needs to be multi threaded
+
+    def post_handle(self, fn, action):
+        return fn
 
 
 class GridEnv2D(Environment):
@@ -236,16 +239,14 @@ class GridEnv2D(Environment):
         self.state.grid2d.grid = np.random.default_rng().integers(2, size=(dims[0], dims[1]))
 
     def handle_actuator(self, state_node, action, actuator):
-        new_state = deepcopy(state_node)
+        fn = StateNode(parent=state_node.parent, prev_action=state_node.prev_action, state=state_node.state, path_cost=state_node.path_cost)
         if action.name in self.allowed_actions:
-            new_state = actuator.act(action=action, state_node=new_state)
+            fn = actuator.act(action=action, state_node=fn)
         else:
-            new_state = super(GridEnv2D, self).handle_actuator(new_state, action, actuator)
-        return self.post_handle(new_state, action)
-        # possibly contain a list of actuators and handlers for each actuator
+            fn = super(GridEnv2D, self).handle_actuator(fn, action, actuator)
+        return fn
 
-    def post_handle(self, new_state, action):
-        return new_state
+        # possibly contain a list of actuators and handlers for each actuator
 
 
 class VacuumWorld(GridEnv2D):
@@ -265,11 +266,11 @@ class VacuumWorld(GridEnv2D):
         self.add_agents(agent)
         return StateNode(parent=None, prev_action=None, state=loc_state) if loc else None
 
-    def post_handle(self, new_state, action):
+    def post_handle(self, fn, action):
         if action in ['Left', 'Right', 'Up', 'Down']:
-            loc = new_state.location
-            new_state.grid2d.grid[loc[0]][loc[1]] = self.state.grid2d.grid[loc[0]][loc[1]]
-            return new_state
+            loc = fn.state.location
+            fn.state.grid2d.grid[loc[0]][loc[1]] = self.state.grid2d.grid[loc[0]][loc[1]]
+            return fn
 
 
 

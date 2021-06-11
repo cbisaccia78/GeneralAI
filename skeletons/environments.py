@@ -241,12 +241,11 @@ class GridEnv2D(Environment):
             new_state = actuator.act(action=action, state_node=new_state)
         else:
             new_state = super(GridEnv2D, self).handle_actuator(new_state, action, actuator)
-        self.post_handle(new_state, action)
-        return new_state
+        return self.post_handle(new_state, action)
         # possibly contain a list of actuators and handlers for each actuator
 
     def post_handle(self, new_state, action):
-        return
+        return new_state
 
 
 class VacuumWorld(GridEnv2D):
@@ -267,8 +266,11 @@ class VacuumWorld(GridEnv2D):
         return StateNode(parent=None, prev_action=None, state=loc_state) if loc else None
 
     def post_handle(self, new_state, action):
-        if action == 'Suck':
-            return
+        if action in ['Left', 'Right', 'Up', 'Down']:
+            loc = new_state.location
+            new_state.grid2d.grid[loc[0]][loc[1]] = self.state.grid2d.grid[loc[0]][loc[1]]
+            return new_state
+
 
 
 

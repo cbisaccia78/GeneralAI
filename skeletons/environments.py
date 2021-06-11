@@ -239,7 +239,8 @@ class GridEnv2D(Environment):
         self.state.grid2d.grid = np.random.default_rng().integers(2, size=(dims[0], dims[1]))
 
     def handle_actuator(self, state_node, action, actuator):
-        fn = StateNode(parent=state_node.parent, prev_action=state_node.prev_action, state=state_node.state, path_cost=state_node.path_cost)
+        #fn = StateNode(parent=state_node.parent, prev_action=state_node.prev_action, state=state_node.state, path_cost=state_node.path_cost)
+        fn = deepcopy(state_node)
         if action.name in self.allowed_actions:
             fn = actuator.act(action=action, state_node=fn)
         else:

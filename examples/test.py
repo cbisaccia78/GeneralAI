@@ -1,3 +1,5 @@
+import sys
+
 from skeletons.environments import VacuumWorld
 from skeletons.agents import BasicProblemSolver
 from skeletons.helpers import manhattan
@@ -25,5 +27,5 @@ def init_world():
         step_cost=manhattan) for i in range(0, num_agents)]
     world.start_agents()
 
-
+sys.setrecursionlimit(10000000)
 init_world()

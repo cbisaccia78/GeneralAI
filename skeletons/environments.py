@@ -255,7 +255,7 @@ class VacuumWorld(GridEnv2D):
         self.randomize_grid()
         self.allowed_agents["Vacuum"] = col + row
         self.allowed_actions = {'Suck', 'Left', 'Right', 'Up', 'Down'}
-        self.rules.add(self.one_agent_one_square)
+        # self.rules.add(self.one_agent_one_square)
 
     def assign_initial_state(self, agent):
         loc = self.assign_location(agent)

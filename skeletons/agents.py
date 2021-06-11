@@ -128,7 +128,7 @@ class BasicProblemSolver(Agent):
         return None
 
     def expand(self, node):
-        return self.environment.gen_future_nodes(node, self.actions(node.state), self.actuators, self.problem.step_cost)
+        return self.environment.gen_future_nodes(node, self.actions(node.state), self.actuators, self.step_cost)
 
     def search(self, depth=None, search_type="best_first"):
         """

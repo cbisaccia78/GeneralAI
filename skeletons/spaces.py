@@ -7,10 +7,10 @@ class Space:
 
 
 class Grid2D(Space):
-    def __init__(self, columns, rows):
+    def __init__(self, columns, rows, grid=None):
         self.c = columns
         self.r = rows
-        self.grid = np.full(shape=(rows, columns), fill_value=0.5)
+        self.grid = grid if isinstance(grid, np.ndarray) else np.full(shape=(rows, columns), fill_value=0.5)
 
     def __repr__(self):
         return Grid2D.__name__

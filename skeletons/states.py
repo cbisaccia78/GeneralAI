@@ -29,7 +29,7 @@ class State:
     @staticmethod
     def is_in(state1, states):
         for state in states:
-            if state1.__eq__(state):
+            if State.sub_state(state, state1):
                 return True
         return False
 

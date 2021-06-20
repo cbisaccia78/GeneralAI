@@ -136,7 +136,7 @@ class BasicProblemSolver(Agent):
         :param search_type: defaults to best first search
         :returns: sequence of actions that define a solution.
         """
-        goal = self.problem.test(self.curr_state_node)
+        goal = self.problem.test(self.curr_state_node.state)
         if goal:
             return self.curr_state_node
         return self.best_first_search(self.curr_state_node, depth_limit=depth, f=lambda x: x*2)

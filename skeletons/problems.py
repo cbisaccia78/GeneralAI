@@ -1,4 +1,3 @@
-from skeletons.actions import Action
 from skeletons.states import State
 
 

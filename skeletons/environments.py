@@ -108,15 +108,16 @@ class Environment:
     def result(self, state_node, action, actuator):
         new_state_node = self.handle_actuator(state_node=state_node, action=action, actuator=actuator)
         if self.valid(new_state_node):
-            return new_state_node
+            return self.post_handle(new_state_node, action)
         return None
 
-    def gen_future_nodes(self, state_node, actions, actuators):
+    def gen_future_nodes(self, state_node, actions, actuators, step_cost):
         """
             specifies transition model.
             :param state_node:
             :param actions:
             :param actuators:
+            :param step_cost:
             :return: new_state_node
         """
         # ss_set_list = str([state.Location.data for state in self.ss_set])
@@ -130,11 +131,12 @@ class Environment:
                     break
             if not valid_actuator:
                 continue
-            future_state_node = self.result(state_node=state_node, action=action, actuator=valid_actuator)
-            if future_state_node and not State.is_in(future_state_node.state, self.ss_set):
-                future_state_node.prev_action = action
-                future_state_node.parent = state_node
-                future_nodes.append(future_state_node)
+            fn = self.result(state_node=state_node, action=action, actuator=valid_actuator)
+            if fn:
+                fn.prev_action = action
+                fn.parent = state_node
+                fn.path_cost = state_node.path_cost + step_cost(state_node.state, fn.prev_action, fn.state)
+                future_nodes.append(fn)
 
         return future_nodes
 
@@ -142,6 +144,9 @@ class Environment:
         for agent_name in self.agents:
             for agent in self.agents[agent_name]:
                 agent.agent_program()  # this needs to be multi threaded
+
+    def post_handle(self, fn, action):
+        return fn
 
 
 class GridEnv2D(Environment):
@@ -234,17 +239,15 @@ class GridEnv2D(Environment):
         self.state.grid2d.grid = np.random.default_rng().integers(2, size=(dims[0], dims[1]))
 
     def handle_actuator(self, state_node, action, actuator):
-        new_state = deepcopy(state_node)
+        #fn = StateNode(parent=state_node.parent, prev_action=state_node.prev_action, state=state_node.state, path_cost=state_node.path_cost)
+        fn = deepcopy(state_node)
         if action.name in self.allowed_actions:
-            new_state = actuator.act(action=action, state_node=new_state)
+            fn = actuator.act(action=action, state_node=fn)
         else:
-            new_state = super(GridEnv2D, self).handle_actuator(new_state, action, actuator)
-        self.post_handle(new_state, action)
-        return new_state
-        # possibly contain a list of actuators and handlers for each actuator
+            fn = super(GridEnv2D, self).handle_actuator(fn, action, actuator)
+        return fn
 
-    def post_handle(self, new_state, action):
-        return
+        # possibly contain a list of actuators and handlers for each actuator
 
 
 class VacuumWorld(GridEnv2D):
@@ -253,11 +256,23 @@ class VacuumWorld(GridEnv2D):
         self.randomize_grid()
         self.allowed_agents["Vacuum"] = col + row
         self.allowed_actions = {'Suck', 'Left', 'Right', 'Up', 'Down'}
-        self.rules.add(self.one_agent_one_square)
+        # self.rules.add(self.one_agent_one_square)
 
-    def post_handle(self, new_state, action):
-        if action == 'Suck':
-            return
+    def assign_initial_state(self, agent):
+        loc = self.assign_location(agent)
+        gr = Grid2D(self.max_x, self.max_y)
+        has_dirt = self.state.grid2d.grid[loc[0]][loc[1]]
+        gr.grid[loc[0]][loc[1]] = has_dirt
+        loc_state = State(location=loc, grid2d=gr, vacuum=True)
+        self.add_agents(agent)
+        return StateNode(parent=None, prev_action=None, state=loc_state) if loc else None
+
+    def post_handle(self, fn, action):
+        if action in ['Left', 'Right', 'Up', 'Down']:
+            loc = fn.state.location
+            fn.state.grid2d.grid[loc[0]][loc[1]] = self.state.grid2d.grid[loc[0]][loc[1]]
+            return fn
+
 
 
 

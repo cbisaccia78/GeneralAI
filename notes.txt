@@ -1,0 +1,35 @@
+4 main components of learning agents
+
+
+
+1. Critic
+    observes the world and tells the learning element how well agent is doing with respect to fixed performance standard
+
+2. Learning Element
+    Uses feedback from the critic on how the agent is doing to determine how performance element should be
+    modified to do better in future.
+    Design depends very much on the design of the performance element.
+
+3. Problem Generator
+    Suggests actions that could lead to new and informative experiences
+
+4. Performance Element
+    Takes in percepts and decides on actions.
+
+
+
+Evaluating Search algorithms:
+
+should be evaluated based on:
+
+completeness - guaranteed to find a solution if one exists?
+optimality - guaranteed that solution has lowest path cost?
+time complexity - how long does it take to find solution? T(b,d,m) = # nodes generated during search
+space complexity - how much memory is needed to perform the search?  S(b,d,m) = maximum # of nodes stored in memory during search
+
+complexity is considered with respect to the difficulty measure of the problem
+
+difficulty measure of the problem is expressed in terms of three quantities:
+    b - the branching factor or maximum number of successors of any node;
+    d - the depth of the shallowest goal node (i.e., the number of steps along the path from the root);
+    m - the maximum length of any path in the state space

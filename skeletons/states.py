@@ -1,3 +1,4 @@
+from types import FunctionType
 
 class State:
     """
@@ -17,7 +18,7 @@ class State:
         return hash(self.__key())
 
     def __key(self):
-        return tuple(getattr(self, attr) for attr in self.__dict__)
+        return (getattr(self, attr) for attr in self.__dict__)
 
     @staticmethod
     def sub_state(state1, state2):
@@ -39,7 +40,7 @@ class StateNode:
         self.parent = parent
         self.prev_action = prev_action
         self.state = state
-        self.path_cost = path_cost(parent.state, prev_action, state) if path_cost else 0
+        self.path_cost = (path_cost(parent.state, prev_action, state) if isinstance(path_cost, FunctionType) else path_cost) if path_cost else 0
 
 
 

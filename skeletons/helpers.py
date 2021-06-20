@@ -5,7 +5,7 @@ from skeletons.actions import Action
 def manhattan(s1: State, a: Action, s2: State = None):
     loc1 = s1.location
     loc2 = s2.location
-    return loc2.x - loc1.x + loc2.y - loc1.y
+    return abs(loc2[0] - loc1[0]) + abs(loc2[1] - loc1[1])
 
 
 def basic_eval(state):

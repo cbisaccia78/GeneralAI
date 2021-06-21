@@ -268,13 +268,11 @@ class VacuumWorld(GridEnv2D):
         return StateNode(parent=None, prev_action=None, state=loc_state) if loc else None
 
     def post_handle(self, fn, action):
-        if action in ['Left', 'Right', 'Up', 'Down', 'Suck']:
+        if action in ['Left', 'Right', 'Up', 'Down']:
             loc = fn.state.location
-            try:
-                fn.state.grid2d.grid[loc[0]][loc[1]] = self.state.grid2d.grid[loc[0]][loc[1]]
-            except Exception as e:
-                return fn
-            return fn
+            fn.state.grid2d.grid[loc[0]][loc[1]] = self.state.grid2d.grid[loc[0]][loc[1]]
+        return fn
+
 
 
 

@@ -83,14 +83,23 @@ class BasicProblemSolver(Agent):
             return True
         else:
             # eyes closed
+            print(self.environment.state.grid2d.grid)
+            print('_______________')
+            loc = self.curr_state_node.state.location
+            print(f'x = {loc[1]}, y = {loc[0]}')
+            print(self.curr_state_node.state.grid2d.grid)
             solution = self.search()
             if solution:
-                for node in solution:
+                node = solution
+                while node.parent:
                     """
                     done in a for loop to simulate time, instead of just doing curr_state_node = solution[-1]
                     need to find a way to incorporate time into state transitions
                     """
                     self.curr_state_node = node
+                    print(node.prev_action)
+                    node = node.parent
+                return
 
     def act(self):
         """
@@ -117,7 +126,6 @@ class BasicProblemSolver(Agent):
                 print(count)
             node = self.frontier.pop()
             if self.problem.test(node.state):
-                print(node)
                 return node
             for child in self.expand(node):
                 s = child.state

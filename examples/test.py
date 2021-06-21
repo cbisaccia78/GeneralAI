@@ -19,12 +19,13 @@ def init_world():
     agents = [BasicProblemSolver(
         name=('solver' + str(i)),
         environment=world,
-        goal_states=[State(grid2d=Grid2D(col, row, grid=np.zeros((col, row))))],
+        goal_states=[State(grid2d=Grid2D(col, row, grid=np.zeros((row, col))))],
         closed_loop=False,
         actuators=[Mover(), Sucker()],
         sensors=[VacuumSensor],
         step_cost=manhattan) for i in range(0, num_agents)]
     world.start_agents()
+    world = None
 
 sys.setrecursionlimit(10000000)
 init_world()

@@ -8,8 +8,8 @@ from skeletons.sensors import VacuumSensor
 from skeletons.spaces import Grid2D
 from skeletons.states import State
 import numpy as np
-col = 2
-row = 1
+col = 5
+row = 5
 num_agents = 1
 
 

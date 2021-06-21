@@ -170,8 +170,8 @@ class GridEnv2D(Environment):
         if state_node is None or state_node.state is None or state_node.state.location is None:
             return False
         loc = state_node.state.location
-        x = loc[0]
-        y = loc[1]
+        y = loc[0]
+        x = loc[1]
         if -1 < x < self.max_x:
             if -1 < y < self.max_y:
                 return True
@@ -268,9 +268,12 @@ class VacuumWorld(GridEnv2D):
         return StateNode(parent=None, prev_action=None, state=loc_state) if loc else None
 
     def post_handle(self, fn, action):
-        if action in ['Left', 'Right', 'Up', 'Down']:
+        if action in ['Left', 'Right', 'Up', 'Down', 'Suck']:
             loc = fn.state.location
-            fn.state.grid2d.grid[loc[0]][loc[1]] = self.state.grid2d.grid[loc[0]][loc[1]]
+            try:
+                fn.state.grid2d.grid[loc[0]][loc[1]] = self.state.grid2d.grid[loc[0]][loc[1]]
+            except Exception as e:
+                return fn
             return fn
 
 

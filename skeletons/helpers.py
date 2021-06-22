@@ -16,6 +16,10 @@ def basic_eval(node):
     return count
 
 
+def path_cost(node):
+    return node.path_cost
+
+
 """
 ________________________________________________________________________________________________________________________
 Goal Functions

@@ -161,7 +161,7 @@ class BasicProblemSolver(Agent):
     def expand(self, node):
         return self.environment.gen_future_nodes(node, self.actions(node.state), self.actuators, self.step_cost)
 
-    def search(self, depth=None, search_type="best_first"):
+    def search(self, depth=None, search_type="dijkstra"):
         """
         makes use of self.problem: provides filtering of environment into a relevant set of features (state space),
         coupled with a path cost function, a goal evaluation function, and much much more!
@@ -170,10 +170,10 @@ class BasicProblemSolver(Agent):
         :param search_type: defaults to best first search
         :returns: sequence of actions that define a solution.
         """
-        goal = self.problem.test(self.curr_state_node.state)
-        if goal:
-            return self.curr_state_node
-        return self.best_first_search(self.curr_state_node, depth_limit=depth, f=lambda x: 1)
+        if search_type == "dijkstra":
+            return self.best_first_search(self.curr_state_node, depth_limit=depth)
+        else:
+            return self.breadth_first_search(self.curr_state_node, depth_limit=depth)
 
 
 class BasicUtility(Agent):

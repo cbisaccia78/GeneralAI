@@ -8,8 +8,12 @@ def manhattan(s1: State, a: Action, s2: State = None):
     return abs(loc2[0] - loc1[0]) + abs(loc2[1] - loc1[1])
 
 
-def basic_eval(state):
-    return state.location
+def basic_eval(node):
+    count = 0
+    while node.parent:
+        node = node.parent
+        count += 1
+    return count
 
 
 """

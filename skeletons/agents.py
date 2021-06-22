@@ -117,6 +117,27 @@ class BasicProblemSolver(Agent):
         if solution:
             self.curr_state_node = solution[0]
 
+    def breadth_first_search(self, initial_node, depth_limit):
+        goal = self.problem.test(initial_node.state)
+        if depth_limit == 0:
+            return goal
+        future_nodes = self.environment.gen_future_nodes(initial_node, self.actions(initial_node.state), self.actuators,
+                                                         self.step_cost)
+        self.frontier.extend(future_nodes) # f is just depth of tree so no need to sort
+        self.reached = {initial_node.state} # can avoid hash table because no redundant paths
+        count = 0
+        while len(self.frontier) > 0:
+            node = self.frontier.pop()
+            for child in self.expand(node):
+                if self.problem.test(child.state): # can test as soon as generated, because no redundant paths
+                    return node
+                s = child.state
+                if s not in self.reached:
+                    self.reached[s] = child
+                    self.frontier.append(child)  # ToDo need to make sure this child is placed in correct order
+            count += 1
+        return None
+
     def best_first_search(self, initial_node, depth_limit, f=basic_eval):
         goal = self.problem.test(initial_node.state)
         if depth_limit == 0:

@@ -5,6 +5,7 @@ from skeletons.helpers import basic_eval
 from functools import lru_cache
 
 
+
 class Agent:
     def __init__(self, name=None, environment=None):
         self.name = name
@@ -48,7 +49,7 @@ class BasicProblemSolver(Agent):
             goal_states=None,
             step_cost=None,
             actuators=None,
-            sensors=None
+            sensors=None,
     ):
         super(BasicProblemSolver, self).__init__(name, environment)
         self.actuators = actuators
@@ -58,6 +59,7 @@ class BasicProblemSolver(Agent):
         self.problem = Problem(initial_state=self.curr_state_node.state, goal_states=goal_states, step_cost=step_cost)
         self.frontier = []
         self.reached = {}
+        self.stat_string = ""
 
     def actions(self, state):
         properties = [prop for prop in vars(state) if not prop.startswith(("__"))]
@@ -83,27 +85,26 @@ class BasicProblemSolver(Agent):
             return True
         else:
             # eyes closed
-            print('_______________')
-            print(self.environment.state.grid2d.grid)
-            print('_______________')
+            #print('_______________')
+            #print(self.environment.state.grid2d.grid)
+            #print('_______________')
             loc = self.curr_state_node.state.location
-            print(f'x = {loc[1]}, y = {loc[0]}')
-            print(self.curr_state_node.state.grid2d.grid)
+            #print(f'x = {loc[1]}, y = {loc[0]}')
+            #print(self.curr_state_node.state.grid2d.grid)
             solution = self.search()
-            if solution:
+            """if solution:
                 node = solution
                 action_list = []
+                
                 while node.parent:
-                    """
-                    done in a for loop to simulate time, instead of just doing curr_state_node = solution[-1]
-                    need to find a way to incorporate time into state transitions
-                    """
+                    '''done in a for loop to simulate time, instead of just doing curr_state_node = solution[-1]
+                    need to find a way to incorporate time into state transitions'''
                     self.curr_state_node = node
                     action_list.append(node.prev_action)
                     node = node.parent
                 action_list.reverse()
                 print(action_list)
-                return
+                return"""
 
     def act(self):
         """
@@ -126,16 +127,19 @@ class BasicProblemSolver(Agent):
         self.frontier.extend(future_nodes) # f is just depth of tree so no need to sort
         self.reached = {initial_node.state} # can avoid hash table because no redundant paths
         count = 0
+        count += len(future_nodes)
         while len(self.frontier) > 0:
             node = self.frontier.pop()
             for child in self.expand(node):
+                count += 1
                 if self.problem.test(child.state): # can test as soon as generated, because no redundant paths
+                    self.stat_string += f"{count},"
                     return node
                 s = child.state
                 if s not in self.reached:
-                    self.reached[s] = child
+                    self.reached.add(s)
                     self.frontier.append(child)  # ToDo need to make sure this child is placed in correct order
-            count += 1
+        self.stat_string += f"{count},"
         return None
 
     def best_first_search(self, initial_node, depth_limit, f=basic_eval):
@@ -146,22 +150,25 @@ class BasicProblemSolver(Agent):
         self.frontier.extend(sorted(future_nodes, key=f))
         self.reached = {initial_node.state: initial_node}
         count = 0
+        count += len(future_nodes)
         while len(self.frontier) > 0:
             node = self.frontier.pop()
             if self.problem.test(node.state):
+                self.stat_string += f"{count},"
                 return node
             for child in self.expand(node):
                 s = child.state
                 if s not in self.reached or child.path_cost < self.reached[s].path_cost:
                     self.reached[s] = child
                     self.frontier.append(child)  # ToDo need to make sure this child is placed in correct order
-            count += 1
+                count += 1
+        self.stat_string += f"{count},"
         return None
 
     def expand(self, node):
         return self.environment.gen_future_nodes(node, self.actions(node.state), self.actuators, self.step_cost)
 
-    def search(self, depth=None, search_type="dijkstra"):
+    def search(self, depth=None, search_type="dijkstr"):
         """
         makes use of self.problem: provides filtering of environment into a relevant set of features (state space),
         coupled with a path cost function, a goal evaluation function, and much much more!

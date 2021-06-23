@@ -8,6 +8,7 @@ from skeletons.sensors import VacuumSensor
 from skeletons.spaces import Grid2D
 from skeletons.states import State
 import numpy as np
+
 col = 5
 row = 5
 num_agents = 1
@@ -25,7 +26,19 @@ def init_world():
         sensors=[VacuumSensor],
         step_cost=manhattan) for i in range(0, num_agents)]
     world.start_agents()
+    # print(agents[0].stat_string)
+    return agents[0].stat_string
     world = None
 
-sys.setrecursionlimit(10000000)
-init_world()
+
+with open('stats.txt', 'a+') as _file:
+    for s in range(1,4):
+        _file.write(f"({s}x{s})")
+        col = s
+        row = s
+        for i in range(0, 500):
+            big_guy = ""
+            big_guy += init_world()
+            _file.write(big_guy)
+        _file.write("\n")
+_file.close()

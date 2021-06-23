@@ -36,9 +36,9 @@ with open('stats.txt', 'a+') as _file:
         _file.write(f"({s}x{s})")
         col = s
         row = s
+        big_guy = ""
         for i in range(0, 500):
-            big_guy = ""
             big_guy += init_world()
-            _file.write(big_guy)
+        _file.write(big_guy)
         _file.write("\n")
 _file.close()

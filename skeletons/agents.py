@@ -168,7 +168,7 @@ class BasicProblemSolver(Agent):
     def expand(self, node):
         return self.environment.gen_future_nodes(node, self.actions(node.state), self.actuators, self.step_cost)
 
-    def search(self, depth=None, search_type="dijkstr"):
+    def search(self, depth=None, search_type="dijkstra"):
         """
         makes use of self.problem: provides filtering of environment into a relevant set of features (state space),
         coupled with a path cost function, a goal evaluation function, and much much more!

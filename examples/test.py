@@ -26,12 +26,10 @@ def init_world():
         sensors=[VacuumSensor],
         step_cost=manhattan) for i in range(0, num_agents)]
     world.start_agents()
-    # print(agents[0].stat_string)
-    return agents[0].stat_string
     world = None
 
 
-with open('stats.txt', 'a+') as _file:
+"""with open('stats.txt', 'a+') as _file:
     for s in range(1,4):
         _file.write(f"({s}x{s})")
         col = s
@@ -41,4 +39,5 @@ with open('stats.txt', 'a+') as _file:
             big_guy += init_world()
         _file.write(big_guy)
         _file.write("\n")
-_file.close()
+_file.close()"""
+init_world()

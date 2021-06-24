@@ -1,7 +1,7 @@
 from skeletons.actions import Left, Right, Up, Down, Suck
 from skeletons.problems import Problem
 from skeletons.percepts import Percepts
-from skeletons.helpers import basic_eval
+from skeletons.helpers import basic_eval, path_cost, depth_cost
 from functools import lru_cache
 
 
@@ -92,7 +92,7 @@ class BasicProblemSolver(Agent):
             #print(f'x = {loc[1]}, y = {loc[0]}')
             #print(self.curr_state_node.state.grid2d.grid)
             solution = self.search()
-            """if solution:
+            if solution:
                 node = solution
                 action_list = []
                 
@@ -104,7 +104,7 @@ class BasicProblemSolver(Agent):
                     node = node.parent
                 action_list.reverse()
                 print(action_list)
-                return"""
+                return
 
     def act(self):
         """
@@ -165,6 +165,22 @@ class BasicProblemSolver(Agent):
         self.stat_string += f"{count},"
         return None
 
+    def depth_first_search(self, initial_node, depth_limit):
+        goal = self.problem.test(initial_node.state)
+        if depth_limit == 0:
+            return goal
+        future_nodes = self.environment.gen_future_nodes(initial_node, self.actions(initial_node.state), self.actuators,
+                                                         self.step_cost)
+        self.frontier.extend(future_nodes)  # LIFO stack
+        while len(self.frontier) > 0:
+            node = self.frontier.pop(-1)
+            if self.problem.test(node.state):
+                return node
+            if node.depth <= depth_limit:
+                for child in self.expand(node):
+                    self.frontier.extend(child)
+        return None
+
     def expand(self, node):
         return self.environment.gen_future_nodes(node, self.actions(node.state), self.actuators, self.step_cost)
 
@@ -178,7 +194,9 @@ class BasicProblemSolver(Agent):
         :returns: sequence of actions that define a solution.
         """
         if search_type == "dijkstra":
-            return self.best_first_search(self.curr_state_node, depth_limit=depth)
+            return self.best_first_search(self.curr_state_node, depth_limit=depth, f=path_cost)
+        elif search_type == 'dfs':
+            return self.best_first_search(self.curr_state_node, depth_limit=depth, f=depth_cost)
         else:
             return self.breadth_first_search(self.curr_state_node, depth_limit=depth)
 

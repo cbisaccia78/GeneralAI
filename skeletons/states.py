@@ -36,8 +36,9 @@ class State:
 
 
 class StateNode:
-    def __init__(self, parent, prev_action, state, path_cost=None):
+    def __init__(self, parent, prev_action, state, path_cost=None, depth=0):
         self.parent = parent
+        self.depth = depth if depth == 0 else parent.depth + 1
         self.prev_action = prev_action
         self.state = state
         self.path_cost = (path_cost(parent.state, prev_action, state) if isinstance(path_cost, FunctionType) else path_cost) if path_cost else 0

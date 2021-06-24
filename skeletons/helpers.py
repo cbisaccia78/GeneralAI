@@ -20,6 +20,10 @@ def path_cost(node):
     return node.path_cost
 
 
+def depth_cost(node, factor=-1):
+    return factor * node.depth
+
+
 """
 ________________________________________________________________________________________________________________________
 Goal Functions

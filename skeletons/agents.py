@@ -179,7 +179,7 @@ class BasicProblemSolver(Agent):
             if node.depth <= depth_limit:
                 if not is_cycle(node, depth_limit):
                     for child in self.expand(node):
-                        self.frontier.extend(child)
+                        self.frontier.append(child)
         return None
 
     def iterative_deepening(self, initial_node, iter_max):
@@ -193,19 +193,22 @@ class BasicProblemSolver(Agent):
     def expand(self, node):
         return self.environment.gen_future_nodes(node, self.actions(node.state), self.actuators, self.step_cost)
 
-    def search(self, depth=None, search_type="dijkstra"):
+    def search(self, depth=None, search_type="dijkstra", iter_max=None):
         """
         makes use of self.problem: provides filtering of environment into a relevant set of features (state space),
         coupled with a path cost function, a goal evaluation function, and much much more!
         Can currently only search from the agents current state.
         :param depth: if depth == None then it searches the whole state space
         :param search_type: defaults to best first search
+        :param iter_max: how far to go for iterative deepening
         :returns: sequence of actions that define a solution.
         """
         if search_type == "dijkstra":
             return self.best_first_search(self.curr_state_node, depth_limit=depth, f=path_cost)
         elif search_type == 'dfs':
             return self.best_first_search(self.curr_state_node, depth_limit=depth, f=depth_cost)
+        elif search_type == 'id':
+            return self.iterative_deepening(self.curr_state_node, iter_max=iter_max if iter_max else 50)
         else:
             return self.breadth_first_search(self.curr_state_node, depth_limit=depth)
 

@@ -30,6 +30,9 @@ class Left(Action):
     def __init__(self, units=1):
         self.units = units
 
+    def __copy__(self):
+        return Left()
+
 
 class Right(Action):
     name = 'Right'
@@ -42,6 +45,9 @@ class Right(Action):
 
     def __init__(self, units=1):
         self.units = units
+
+    def __copy__(self):
+        return Right()
 
 
 class Up(Action):
@@ -56,6 +62,9 @@ class Up(Action):
     def __init__(self, units=1):
         self.units = units
 
+    def __copy__(self):
+        return Up()
+
 
 class Down(Action):
     name = 'Down'
@@ -69,6 +78,9 @@ class Down(Action):
     def __init__(self, units=1):
         self.units = units
 
+    def __copy__(self):
+        return Down()
+
 
 class Suck(Action):
     name = 'Suck'
@@ -81,3 +93,6 @@ class Suck(Action):
 
     def __init__(self):
         pass
+
+    def __copy__(self):
+        return Suck()

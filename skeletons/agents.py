@@ -1,7 +1,7 @@
 from skeletons.actions import Left, Right, Up, Down, Suck
 from skeletons.problems import Problem
 from skeletons.percepts import Percepts
-from skeletons.helpers import basic_eval, path_cost, depth_cost
+from skeletons.helpers import basic_eval, path_cost, depth_cost, is_cycle
 from functools import lru_cache
 
 
@@ -165,7 +165,9 @@ class BasicProblemSolver(Agent):
         self.stat_string += f"{count},"
         return None
 
-    def depth_first_search(self, initial_node, depth_limit):
+    def depth_first_search(self, initial_node, depth_limit, diameter=None):
+        if not diameter:
+            diameter = depth_limit / 4
         goal = self.problem.test(initial_node.state)
         if depth_limit == 0:
             return goal
@@ -177,8 +179,17 @@ class BasicProblemSolver(Agent):
             if self.problem.test(node.state):
                 return node
             if node.depth <= depth_limit:
-                for child in self.expand(node):
-                    self.frontier.extend(child)
+                if not is_cycle(node, diameter):
+                    for child in self.expand(node):
+                        self.frontier.extend(child)
+        return None
+
+    def iterative_deepening(self, initial_node, iter_max):
+        #  does initial node need to be recreated for each search?
+        for i in range(0, iter_max):
+            solution = self.depth_first_search(initial_node, i)
+            if solution:
+                return solution
         return None
 
     def expand(self, node):

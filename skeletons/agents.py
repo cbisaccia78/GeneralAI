@@ -165,9 +165,7 @@ class BasicProblemSolver(Agent):
         self.stat_string += f"{count},"
         return None
 
-    def depth_first_search(self, initial_node, depth_limit, diameter=None):
-        if not diameter:
-            diameter = depth_limit / 4
+    def depth_first_search(self, initial_node, depth_limit):
         goal = self.problem.test(initial_node.state)
         if depth_limit == 0:
             return goal
@@ -179,7 +177,7 @@ class BasicProblemSolver(Agent):
             if self.problem.test(node.state):
                 return node
             if node.depth <= depth_limit:
-                if not is_cycle(node, diameter):
+                if not is_cycle(node, depth_limit):
                     for child in self.expand(node):
                         self.frontier.extend(child)
         return None

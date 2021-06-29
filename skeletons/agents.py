@@ -205,6 +205,8 @@ class BasicProblemSolver(Agent):
         """
         if search_type == "dijkstra":
             return self.best_first_search(self.curr_state_node, depth_limit=depth, f=path_cost)
+        elif search_type == "bidijkstra":
+            return self.bidirectionalBF(self.curr_state_node, self.problem.goal_states, )
         elif search_type == 'dfs':
             return self.best_first_search(self.curr_state_node, depth_limit=depth, f=depth_cost)
         elif search_type == 'id':

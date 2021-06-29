@@ -111,13 +111,14 @@ class Environment:
             return self.post_handle(new_state_node, action)
         return None
 
-    def gen_future_nodes(self, state_node, actions, actuators, step_cost):
+    def gen_future_nodes(self, state_node, actions, actuators, step_cost, direction=1):
         """
             specifies transition model.
             :param state_node:
             :param actions:
             :param actuators:
             :param step_cost:
+            :param direction: allow for bidirectional search
             :return: new_state_node
         """
         # ss_set_list = str([state.Location.data for state in self.ss_set])
@@ -136,7 +137,7 @@ class Environment:
                 fn.prev_action = action
                 fn.parent = state_node
                 fn.path_cost = state_node.path_cost + step_cost(state_node.state, fn.prev_action, fn.state)
-                fn.depth = state_node.depth + 1
+                fn.depth = state_node.depth + direction
                 future_nodes.append(fn)
 
         return future_nodes

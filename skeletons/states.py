@@ -27,7 +27,6 @@ class State:
     def properties(self):
         return self.__dict__
 
-
     @staticmethod
     def sub_state(state1, state2):
         for attribute in state1.__dict__:
@@ -57,7 +56,7 @@ class StateNode:
         return self.depth == other.depth and self.prev_action == other.prev_action and self.state == other.state
 
     def __deepcopy__(self, memo):
-        return StateNode(parent=self.parent, prev_action=self.prev_action, state=copy.deepcopy(self.state, memo), path_cost=self.path_cost)
+        return StateNode(parent=self.parent, prev_action=self.prev_action, state=deepcopy(self.state, memo), path_cost=self.path_cost)
 
 
 

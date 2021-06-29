@@ -193,7 +193,7 @@ class BasicProblemSolver(Agent):
     def expand(self, node):
         return self.environment.gen_future_nodes(node, self.actions(node.state), self.actuators, self.step_cost)
 
-    def search(self, depth=None, search_type="dijkstra", iter_max=None):
+    def search(self, depth=None, search_type="id", iter_max=10000):
         """
         makes use of self.problem: provides filtering of environment into a relevant set of features (state space),
         coupled with a path cost function, a goal evaluation function, and much much more!
@@ -208,7 +208,7 @@ class BasicProblemSolver(Agent):
         elif search_type == 'dfs':
             return self.best_first_search(self.curr_state_node, depth_limit=depth, f=depth_cost)
         elif search_type == 'id':
-            return self.iterative_deepening(self.curr_state_node, iter_max=iter_max if iter_max else 50)
+            return self.iterative_deepening(self.curr_state_node, iter_max=iter_max)
         else:
             return self.breadth_first_search(self.curr_state_node, depth_limit=depth)
 

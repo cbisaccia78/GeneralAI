@@ -9,8 +9,8 @@ from skeletons.spaces import Grid2D
 from skeletons.states import State
 import numpy as np
 
-col = 8
-row = 8
+col = 3
+row = 3
 num_agents = 1
 
 

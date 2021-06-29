@@ -136,6 +136,7 @@ class Environment:
                 fn.prev_action = action
                 fn.parent = state_node
                 fn.path_cost = state_node.path_cost + step_cost(state_node.state, fn.prev_action, fn.state)
+                fn.depth = state_node.depth + 1
                 future_nodes.append(fn)
 
         return future_nodes

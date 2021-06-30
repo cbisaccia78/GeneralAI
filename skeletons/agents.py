@@ -190,10 +190,13 @@ class BasicProblemSolver(Agent):
                 return solution
         return None
 
+    def a_star(self, initial_node, depth_limit, h):
+        return
+
     def expand(self, node):
         return self.environment.gen_future_nodes(node, self.actions(node.state), self.actuators, self.step_cost)
 
-    def search(self, depth=None, search_type="id", iter_max=10000):
+    def search(self, depth=None, search_type="id", iter_max=10000, h=None):
         """
         makes use of self.problem: provides filtering of environment into a relevant set of features (state space),
         coupled with a path cost function, a goal evaluation function, and much much more!
@@ -211,6 +214,10 @@ class BasicProblemSolver(Agent):
             return self.best_first_search(self.curr_state_node, depth_limit=depth, f=depth_cost)
         elif search_type == 'id':
             return self.iterative_deepening(self.curr_state_node, iter_max=iter_max)
+        elif search_type == 'a_star':
+            if h is None:
+                return None
+            return self.a_star(self.curr_state_node, depth_limit=depth, h=h)
         else:
             return self.breadth_first_search(self.curr_state_node, depth_limit=depth)
 

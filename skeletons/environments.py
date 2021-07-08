@@ -88,13 +88,19 @@ class Environment:
 
     def handle_actuator(self, state_node, action, actuator):
         """
-        This function will need to be overridden for every specific environment
-        :param state_node:
-        :param action:
-        :param actuator:
-        :return:
-        """
-        return state_node
+               This function will need to be overridden for every specific environment
+               :param state_node:
+               :param action:
+               :param actuator:
+               :return:
+               """
+        # fn = StateNode(parent=state_node, prev_action=state_node.action, state=state_node.state, path_cost=state_node.path_cost)
+        fn = deepcopy(state_node)
+        if action.name in self.allowed_actions:
+            fn = actuator.act(action=action, state_node=fn)
+        else:
+            fn = super(GridEnv2D, self).handle_actuator(fn, action, actuator)
+        return fn
 
     def passes(self, state_node, rule):
         return rule(state_node)
@@ -149,6 +155,23 @@ class Environment:
 
     def post_handle(self, fn, action):
         return fn
+
+
+class PokerTable(Environment):
+
+    def __init__(self, players=[], sb=1, bb=2, min_buy=60, max_buy=300, max_seats=9, straddle_allowed=True):
+        self.players = players
+        self.small_blind = sb
+        self.big_blind = bb
+        self.min_buy_in = min_buy
+        self.max_buy_in = max_buy
+        self.straddle_allowed = straddle_allowed
+        self.allowed_agents = {'PokerPlayer': max_seats}
+        self.allowed_actions = {'Bet', 'Fold', 'Call', 'Raise', 'Rebuy', 'Addon'}
+        self.rules = {self.can_wager}
+
+    def can_wager(self, state_node):
+        return
 
 
 class GridEnv2D(Environment):

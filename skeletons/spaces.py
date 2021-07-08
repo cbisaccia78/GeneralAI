@@ -19,3 +19,4 @@ class Grid2D(Space):
         return repr(self) == repr(other) and np.array_equal(self.grid, other.grid)
 
 
+

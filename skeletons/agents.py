@@ -222,6 +222,21 @@ class BasicProblemSolver(Agent):
             return self.breadth_first_search(self.curr_state_node, depth_limit=depth)
 
 
+class PokerPlayer(BasicProblemSolver):
+    def __init__(
+            self,
+            environment=None,
+            name=None,
+            closed_loop=True,
+            goal_states=None,
+            step_cost=None,
+            actuators=None,
+            sensors=None,
+    ):
+        super(PokerPlayer, self).__init__(name, environment, closed_loop, goal_states, step_cost, actuators, sensors)
+
+
+
 class BasicUtility(Agent):
     pass
 

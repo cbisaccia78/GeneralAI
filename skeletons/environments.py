@@ -159,9 +159,8 @@ class Environment:
 
 class PokerTable(Environment):
 
-    def __init__(self, players=[], sb=1, bb=2, min_buy=60, max_buy=300, max_seats=9, straddle_allowed=True):
+    def __init__(self, sb=1, bb=2, min_buy=60, max_buy=300, max_seats=9, straddle_allowed=True):
         super(PokerTable, self).__init__()
-        self.players = players
         self.small_blind = sb
         self.big_blind = bb
         self.min_buy_in = min_buy
@@ -170,10 +169,12 @@ class PokerTable(Environment):
         self.allowed_agents = {'PokerPlayer': max_seats}
         self.allowed_actions = {'Bet', 'Fold', 'Call', 'Raise', 'Rebuy', 'Addon'}
         self.rules = {self.valid_wager}
-        self.init_table()
+        self.state = None
 
     def init_table(self):
-        if len(self.players) == 0:
+        if len(self.state.players) == 0:
+            return
+        for player in self.state.players:
             return
 
 

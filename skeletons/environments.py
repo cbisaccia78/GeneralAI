@@ -160,6 +160,7 @@ class Environment:
 class PokerTable(Environment):
 
     def __init__(self, players=[], sb=1, bb=2, min_buy=60, max_buy=300, max_seats=9, straddle_allowed=True):
+        super(PokerTable, self).__init__()
         self.players = players
         self.small_blind = sb
         self.big_blind = bb
@@ -168,10 +169,21 @@ class PokerTable(Environment):
         self.straddle_allowed = straddle_allowed
         self.allowed_agents = {'PokerPlayer': max_seats}
         self.allowed_actions = {'Bet', 'Fold', 'Call', 'Raise', 'Rebuy', 'Addon'}
-        self.rules = {self.can_wager}
+        self.rules = {self.valid_wager}
+        self.init_table()
 
-    def can_wager(self, state_node):
-        return
+    def init_table(self):
+        if len(self.players) == 0:
+            return
+
+
+    def valid_wager(self, node):
+        s = node.state
+        if node is None or s is None:
+            return False
+        if s.stack_size < 0 or s.bankroll < 0:
+            return False
+        return True
 
 
 class GridEnv2D(Environment):

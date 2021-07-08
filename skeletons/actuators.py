@@ -50,4 +50,36 @@ class Sucker(Actuator):
         return state_node
 
 
+class PokerActuator(Actuator):
+    def __init__(self):
+        super(PokerActuator, self).__init__()
+        self.actions.add('Bet')
+        self.actions.add('Call')
+        self.actions.add('Fold')
+        self.actions.add('Raise')
+        self.actions.add('Rebuy')
+        self.actions.add('Addon')
+
+    def act(self, action, state_node):
+        if action.name not in self.actions:
+            return state_node
+
+        a = action.name
+        if a == 'Bet':
+            return
+        elif a == 'Call':
+            return
+        elif a == 'Fold':
+            return
+        elif a == 'Raise':
+            return
+        elif a == 'Rebuy':
+            return
+        elif a == 'Addon':
+            return
+
+        return state_node
+
+
+
 

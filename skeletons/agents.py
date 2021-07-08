@@ -209,7 +209,7 @@ class BasicProblemSolver(Agent):
         if search_type == "dijkstra":
             return self.best_first_search(self.curr_state_node, depth_limit=depth, f=path_cost)
         elif search_type == "bidijkstra":
-            return self.bidirectionalBF(self.curr_state_node, self.problem.goal_states, )
+            return self.bidirectionalBF(self.curr_state_node, self.problem.goal_states)
         elif search_type == 'dfs':
             return self.best_first_search(self.curr_state_node, depth_limit=depth, f=depth_cost)
         elif search_type == 'id':
@@ -235,26 +235,6 @@ class PokerPlayer(BasicProblemSolver):
     ):
         super(PokerPlayer, self).__init__(name, environment, closed_loop, goal_states, step_cost, actuators, sensors)
 
-
-
-class BasicUtility(Agent):
-    pass
-
-
-class TableDrivenAgent(Agent):
-    def __init__(self, name, environment):
-        super().__init__(name=name, environment=environment)
-        self.tabulator = {}
-
-    def agent_program(self, percept):
-        """
-        In the context of the brain-arm-bottle example, the brain would be the implementation of the agent function.
-        ie) it takes a percept sequence(memory) and maps it to a given action (electrical/chemical impulse sent to the body)
-        :param percept:
-        :return:
-        """
-        self.percept_history.append(percept)
-        return self.tabulator[self.percept_history]
 
 
 

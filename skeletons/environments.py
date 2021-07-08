@@ -177,7 +177,6 @@ class PokerTable(Environment):
         for player in self.state.players:
             return
 
-
     def valid_wager(self, node):
         s = node.state
         if node is None or s is None:

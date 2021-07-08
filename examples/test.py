@@ -1,7 +1,7 @@
 import sys
 
 from skeletons.environments import VacuumWorld, PokerTable
-from skeletons.agents import BasicProblemSolver
+from skeletons.agents import BasicProblemSolver, PokerPlayer
 from skeletons.helpers import manhattan
 from skeletons.actuators import Mover, Sucker
 from skeletons.sensors import VacuumSensor
@@ -28,10 +28,11 @@ def init_vaccum_world():
     world.start_agents()
     world = None
 
+
 def init_poker_world():
     world = PokerTable()
     agents = [PokerPlayer(
-        name=('solver' + str(i)),
+        name=('player' + str(i)),
         environment=world,
         goal_states=[State(grid2d=Grid2D(col, row, grid=np.zeros((row, col))))],
         closed_loop=False,

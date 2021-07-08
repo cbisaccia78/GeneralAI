@@ -96,3 +96,105 @@ class Suck(Action):
 
     def __copy__(self):
         return Suck()
+
+
+class Bet(Action):
+    name = 'Bet'
+
+    def __str__(self):
+        return 'Bet'
+
+    def __repr__(self):
+        return str(self)
+
+    def __init__(self):
+        pass
+
+    def __copy__(self):
+        return Bet()
+
+
+class Call(Action):
+    name = 'Call'
+
+    def __str__(self):
+        return 'Call'
+
+    def __repr__(self):
+        return str(self)
+
+    def __init__(self):
+        pass
+
+    def __copy__(self):
+        return Call()
+
+
+class Fold(Action):
+    name = 'Fold'
+
+    def __str__(self):
+        return 'Fold'
+
+    def __repr__(self):
+        return str(self)
+
+    def __init__(self):
+        pass
+
+    def __copy__(self):
+        return Fold()
+
+
+class Raise(Action):
+    name = 'Raise'
+
+    def __str__(self):
+        return 'Raise'
+
+    def __repr__(self):
+        return str(self)
+
+    def __init__(self):
+        pass
+
+    def __copy__(self):
+        return Raise()
+
+
+class Rebuy(Action):
+    name = 'Rebuy'
+
+    def __str__(self):
+        return 'Rebuy'
+
+    def __repr__(self):
+        return str(self)
+
+    def __init__(self):
+        pass
+
+    def __copy__(self):
+        return Rebuy()
+
+
+class Addon(Action):
+    name = 'Addon'
+
+    def __str__(self):
+        return 'Addon'
+
+    def __repr__(self):
+        return str(self)
+
+    def __init__(self):
+        pass
+
+    def __copy__(self):
+        return Addon()
+
+
+
+
+
+
